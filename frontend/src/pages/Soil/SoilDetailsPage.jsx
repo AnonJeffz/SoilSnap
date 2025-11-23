@@ -12,7 +12,7 @@ export default function SoilDetails() {
         description="SoilSnap Soil Details Page."
         
       />
-      <Link to={'/soil'} className='mb-2'>Back</Link>
+      <Link to={'/soil'} className='mb-2 dark:text-white'>Back</Link>
       <Details />
     </>
   );

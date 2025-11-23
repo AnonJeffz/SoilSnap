@@ -10,7 +10,7 @@ export default function CropDetails() {
         title="SoilSnap | Crops Details"
         description="SoilSnap Crop Details Page."
       />
-      <Link to={'/crops'} className='mb-2'>Back</Link>
+      <Link to={'/crops'} className='mb-2 dark:text-white'>Back</Link>
       <Details />
     </>
   );
