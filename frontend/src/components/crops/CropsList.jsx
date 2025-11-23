@@ -115,15 +115,6 @@ export default function Crop() {
                             </div>
                             <div className="px-6 py-4">
                                 <div className="font-bold text-xl mb-2 dark:text-white"><Link to={`/crops/${crop._id}`}>{crop.name}</Link></div>
-                                <p className="text-gray-700 text-base dark:text-white">
-                                    {(() => {
-                                        const text = crop.description || '';
-                                        if (text.length > 89) { // Limit to 100 characters
-                                            return text.substring(0, 89) + '...';
-                                        }
-                                        return text;
-                                    })()}
-                                </p>
                             </div>
                             <div className="px-6 pt-4 pb-2">
                                 {crop.soil_id.slice(0, 2).map((soil, soilIndex) => (
