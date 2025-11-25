@@ -1,20 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>SoilSnap</title>
-    <meta name="description" content="Analyze soil data quickly with SoilSnap." />
+<body class="dark:bg-gray-900">
+  <div id="root"></div>
 
-    <!-- PWA setup -->
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#4CAF50" />
-    <link rel="apple-touch-icon" href="/images/icon-192x192.png" />
-  </head>
-  <body class="dark:bg-gray-900">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+  <!-- Offline Prefetch Progress UI -->
+  <div id="offline-progress-container" style="display:none; position:fixed; top:0; left:0; width:100%; background:#eee; z-index:9999; padding:5px; text-align:center;">
+    <div id="offline-progress-bar" style="width:0%; height:20px; background:#4caf50;"></div>
+    <span id="offline-progress-text" style="margin-left:10px;">Preparing offline content...</span>
+  </div>
+
+  <script type="module" src="/src/main.tsx"></script>
+
+  <!-- Service Worker registration & progress script -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then(reg => {
+        console.log('Service Worker registered:', reg);
+
+        navigator.serviceWorker.addEventListener('message', evt => {
+          const data = evt.data;
+          const container = document.getElementById('offline-progress-container');
+          const bar = document.getElementById('offline-progress-bar');
+          const text = document.getElementById('offline-progress-text');
+
+          if (!data) return;
+
+          // Prefetch progress
+          if (data.type === "SOIL_PREFETCH_PROGRESS") {
+            if (container.style.display === 'none') container.style.display = 'block';
+            const soilsDownloaded = (bar.dataset.count ? parseInt(bar.dataset.count) : 0) + 1;
+            bar.dataset.count = soilsDownloaded;
+            const totalSoils = 9;
+            const percent = Math.round((soilsDownloaded / totalSoils) * 100);
+            bar.style.width = percent + '%';
+            text.textContent = `Downloading offline data... (${soilsDownloaded}/${totalSoils})`;
+          }
+
+          // Prefetch done
+          if (data.type === "SOIL_PREFETCH_DONE") {
+            bar.style.width = '100%';
+            text.textContent = 'Offline content ready!';
+            setTimeout(() => { container.style.display = 'none'; }, 2000);
+          }
+
+          // Optional: Sync queue messages
+          if (data.type === "SW_SYNC_PROGRESS") console.log(`Sync progress: ${data.index}/${data.total}`, data);
+          if (data.type === "SW_SYNC_DONE") console.log("Sync queue done!");
+        });
+
+        // Ask SW to process pending queue immediately on page load
+        if (navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({ type: 'PROCESS_QUEUE' });
+        }
+      }).catch(err => console.error('SW registration failed:', err));
+    }
+  </script>
+</body>
