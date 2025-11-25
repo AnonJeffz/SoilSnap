@@ -12,7 +12,7 @@
   <!-- Service Worker registration & progress script -->
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').then(reg => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
         console.log('Service Worker registered:', reg);
 
         navigator.serviceWorker.addEventListener('message', evt => {

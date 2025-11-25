@@ -95,10 +95,7 @@ export function useImagePredictor() {
     }
 
     // Branch: if online and configured to use server -> only server path
-    console.log("Navigator online status:", navigator.onLine);
-    console.log("Use server when online setting:", useServerWhenOnline);
     if (navigator.onLine && useServerWhenOnline) {
-      console.log("🌐 Online and server prediction enabled, using model server...");
       setLoading(true);
       setError("");
       setPrediction(null);
