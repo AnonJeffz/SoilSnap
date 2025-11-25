@@ -25,6 +25,11 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+function italicizeSample(text) {
+  if (!text) return "";
+  return text.replace(/\bsample\b/gi, "<i>sample</i>");
+}
+
 function LocationMarker({ setClickedPos }) {
   const [markerPos, setMarkerPos] = useState(null);
   const map = useMapEvents({
@@ -325,7 +330,7 @@ function Predictor() {
         {/* PREDICTION RESULT */}
          {prediction?.alternatives?.length > 0 && (
           <div className="mt-3">
-            <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Distribution</h5>
+            <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Soil Classification</h5>
             <ul className="space-y-3">
               {prediction.alternatives
                 .filter((alt) => !alt.prediction.toLowerCase().includes('non-soil'))  // Filter out "Non-soil" predictions
@@ -415,7 +420,10 @@ function Predictor() {
 
                   {/* Description - full text */}
                   <p className="text-gray-700 dark:text-gray-300 flex-grow">
-                    {crop.description}
+                    <p
+                      className="text-gray-700 dark:text-gray-300 flex-grow"
+                      dangerouslySetInnerHTML={{ __html: italicizeSample(crop.description) }}
+                    />
                   </p>
                 </div>
 

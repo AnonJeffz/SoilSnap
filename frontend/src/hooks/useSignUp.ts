@@ -19,7 +19,7 @@ export function useSignUp() {
 
   const loginGoogle = async () => {
         const base = import.meta.env.VITE_API_URL || "";
-        window.location.href = `${base}/auth/google`;
+        window.location.href = `${base}/api/auth/google`;
     }
 
 
