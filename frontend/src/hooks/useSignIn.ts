@@ -18,7 +18,7 @@ export function useSignIn() {
 
     const loginGoogle = async () => {
         const base = import.meta.env.VITE_API_URL || "";
-        window.location.href = `${base}/api/auth/google`;
+        window.location.href = `${base}/auth/google`;
     }
 
     const validateField = (name: string, value: string) => {
