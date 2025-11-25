@@ -1,18 +1,57 @@
 import PageMeta from '../../components/common/PageMeta';
 import Navbar from '../../components/header/Navbar';
+import { useState } from 'react';
 
 export default function AboutSoil() {
-  const handleDownload = () => {
-    const base = import.meta.env.VITE_API_URL || "";
-    const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
+   const [downloading, setDownloading] = useState(false);
+    const [progress, setProgress] = useState(0);
 
-    const link = document.createElement("a");
-    link.href = apkUrl;
-    link.download = "SoilSnap.apk";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+    const handleDownload = async () => {
+      const base = import.meta.env.VITE_API_URL || "";
+      const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
+
+      try {
+        setDownloading(true);
+        setProgress(0);
+
+        const response = await fetch(apkUrl);
+        if (!response.ok) throw new Error('Download failed');
+
+        const reader = response.body!.getReader();
+        const contentLength = +response.headers.get('Content-Length')!;
+        let receivedLength = 0;
+        const chunks: Uint8Array[] = [];
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          if (value) {
+            chunks.push(value);
+            receivedLength += value.length;
+            setProgress(Math.floor((receivedLength / contentLength) * 100));
+          }
+        }
+
+        // Combine chunks into a Blob
+        const blob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
+        const url = URL.createObjectURL(blob);
+
+        // Trigger download
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'SoilSnap.apk';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert("Download failed. Please try again.");
+      } finally {
+        setDownloading(false);
+        setProgress(0);
+      }
+    };
 
   return (
     <>
@@ -121,8 +160,9 @@ export default function AboutSoil() {
           <button
             onClick={handleDownload}
             className="bg-white dark:bg-green-600 text-green-700 dark:text-white font-semibold px-10 py-4 rounded-full shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1"
+            disabled={downloading}
           >
-            Download App
+            {downloading ? `Downloading... ${progress}%` : 'Download App'}
           </button>
           <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
             <div className="w-64 h-64 bg-white dark:bg-gray-700 rounded-full absolute -top-16 -left-16"></div>
