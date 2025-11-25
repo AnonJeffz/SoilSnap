@@ -49,7 +49,7 @@ export default function Feature() {
           >
             Get Started →
           </button>
-          <button onClick={handleNavigate("/about-soil")}
+          <button onClick={() => handleNavigate("/about-soil")}
             disabled={isExiting}
             className="bg-black/80 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-black transition">
             About Soil
