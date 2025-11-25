@@ -113,7 +113,7 @@ export default function AboutSoil() {
         </div>
 
         {/* ⭐ App Download Section */}
-        <div className="max-w-6xl mx-auto mt-24 px-6 py-20 bg-gradient-to-r from-green-600 to-green-800 dark:from-gray-900 dark:to-gray-800 text-white text-center rounded-3xl relative overflow-hidden">
+        <div className="max-w-6xl mx-auto mt-10 mb-10 px-6 py-20 bg-gradient-to-r from-green-600 to-green-800 dark:from-gray-900 dark:to-gray-800 text-white text-center rounded-3xl relative overflow-hidden">
           <h2 className="text-3xl font-[Merriweather] font-semibold mb-4">Get the SoilSnap App</h2>
           <p className="mb-8 text-lg max-w-2xl mx-auto">
             Take soil analysis on the go and stay updated with the best farming practices. Download the app now!
