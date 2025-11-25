@@ -14,7 +14,7 @@ export default function AboutSoil() {
       <section className="about-soil font-[Inter] bg-white dark:bg-gray-900 min-h-screen">
 
         {/* ⭐ Modern Hero Section (KEEPING AS YOU REQUESTED) */}
-        <div className="w-full bg-gradient-to-br from-green-600 to-green-800 dark:from-green-700 dark:to-green-900 py-24 px-6 text-white">
+        <div className="w-full bg-gradient-to-br from-green-600 to-green-800 dark:from-dark-700 dark:to-dark-900 py-24 px-6 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-6xl font-[Merriweather] font-bold drop-shadow-md">
               About Soil

@@ -52,6 +52,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use("/auth", auth);
 
 app.use("/api/users", user);
 app.use("/api/auth", auth);
