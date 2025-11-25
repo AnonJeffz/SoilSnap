@@ -71,6 +71,11 @@ app.use("/uploads/location", express.static("backend/uploads/location"));
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
+// Serve service-worker.js correctly
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'dist/service-worker.js'));
+});
+
 app.get("/sw.js", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
 });
