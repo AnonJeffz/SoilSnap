@@ -17,7 +17,6 @@ export default function SignUpForm() {
     setNewUser,
     handleSignUp,
     error,
-    loginGoogle,
   } = useSignUp();
   if (isLoading) {
       return (
@@ -49,7 +48,7 @@ export default function SignUpForm() {
             </p>
           </div>
           <div>
-            <div className="w-full flex justify-center mb-5">
+            {/* <div className="w-full flex justify-center mb-5">
               <button 
                 type="button"
                 onClick={loginGoogle}
@@ -80,8 +79,8 @@ export default function SignUpForm() {
                 </svg>
                 Google
               </button>
-            </div>
-            <div className="relative py-3 sm:py-5">
+            </div> */}
+            {/* <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
@@ -90,7 +89,7 @@ export default function SignUpForm() {
                   Or
                 </span>
               </div>
-            </div>
+            </div> */}
             <form>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -146,7 +145,7 @@ export default function SignUpForm() {
                 {/* <!-- Password --> */}
                 <div>
                   <Label>
-                    Password <span className={`text-error-500 ${ error.password == "Password is required" || error.password == "Email already exists" ? '' : 'hidden'}`}>*</span>
+                    Password <span className={`text-error-500 ${ error.password == "Password is required" || error.password == "Email already exists" || error.password == "Password must be at least 8 characters long" || error.password == "Password must include at least one uppercase letter" || error.password == "Password must include at least one number" || error.password == "Password must include at least one special character" ? '' : 'hidden'}`}>*</span>
                   </Label>
                   <div className="relative">
                     <Input
