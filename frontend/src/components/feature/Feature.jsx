@@ -5,20 +5,6 @@ export default function Feature() {
   const navigate = useNavigate();
   const [isExiting, setIsExiting] = useState(false);
 
-  const handleDownload = () => {
-    // use Vite env or fallback to public path
-    const base = import.meta.env.VITE_API_URL || "";
-    const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
-
-    const link = document.createElement("a");
-    link.href = apkUrl;
-    link.download = "SoilSnap.apk";
-    // append to DOM for some browsers, trigger click, then remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const handleNavigate = (path) => {
     if (isExiting) return;
     setIsExiting(true);
@@ -63,7 +49,7 @@ export default function Feature() {
           >
             Get Started →
           </button>
-          <button onClick={handleDownload}
+          <button onClick={handleNavigate("/about-soil")}
             disabled={isExiting}
             className="bg-black/80 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-black transition">
             Download

@@ -161,7 +161,7 @@ export default function SignUpForm() {
                     <span
                       onClick={() => setShowPassword(!showPassword)}
                       className={`absolute z-30 cursor-pointer right-4 top-1/2 transform ${
-                        error.password === "Password is required" ? 'top-3' : 'top-1/2 -translate-y-1/2'
+                        error.password == "Password is required" || error.password == "Email already exists" || error.password == "Password must be at least 8 characters long" || error.password == "Password must include at least one uppercase letter" || error.password == "Password must include at least one number" || error.password == "Password must include at least one special character" ? 'top-3' : 'top-1/2 -translate-y-1/2'
                       }`}
                     >
                       {showPassword ? (
