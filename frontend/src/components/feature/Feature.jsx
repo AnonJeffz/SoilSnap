@@ -52,7 +52,7 @@ export default function Feature() {
           <button onClick={handleNavigate("/about-soil")}
             disabled={isExiting}
             className="bg-black/80 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:bg-black transition">
-            Download
+            About Soil
           </button>
         </div>
       </div>
