@@ -37,16 +37,30 @@ export function useSignUp() {
               return value === '' ? 'Role is required' : '';
           case 'password': {
               if (value.trim() === '') return 'Password is required';
-              // Regex for strong password
-              const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-              return strongPasswordRegex.test(value)
-                  ? ''
-                  : 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character';
+
+              // Step 1: Check length
+              if (value.length < 8) return 'Password must be at least 8 characters long';
+
+              // Step 2: Check uppercase
+              if (!/[A-Z]/.test(value)) return 'Password must include at least one uppercase letter';
+
+              // Step 3: Check lowercase
+              if (!/[a-z]/.test(value)) return 'Password must include at least one lowercase letter';
+
+              // Step 4: Check number
+              if (!/\d/.test(value)) return 'Password must include at least one number';
+
+              // Step 5: Check special character
+              if (!/[\W_]/.test(value)) return 'Password must include at least one special character';
+
+              // All checks passed
+              return '';
           }
           default:
               return '';
       }
   };
+
 
     
   const [error, setError] = useState(data);

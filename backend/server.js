@@ -68,13 +68,6 @@ app.use("/uploads/request", express.static("backend/uploads/request"));
 app.use("/uploads/profile", express.static("backend/uploads/profile"));
 app.use("/uploads/location", express.static("backend/uploads/location"));
 
-if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-  });
-}
 
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
