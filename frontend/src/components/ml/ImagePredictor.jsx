@@ -329,7 +329,7 @@ function Predictor() {
             <ul className="space-y-3">
               {prediction.alternatives
                 .filter((alt) => !alt.prediction.toLowerCase().includes('non-soil'))  // Filter out "Non-soil" predictions
-                .slice(0, 4) 
+                .slice(0, 1) 
                 .map((alt) => (
                   <li key={alt.prediction} className="flex items-center gap-4">
                     <div className="flex-1">

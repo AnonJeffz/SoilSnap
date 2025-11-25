@@ -34,7 +34,7 @@ export default function AboutSoil() {
           </ul>
         </div>
 
-        {/* USDA Texture */}
+        {/* USDA Soil Texture */}
         <div className="max-w-6xl mx-auto mt-16">
           <h2 className="text-3xl font-[Merriweather] font-semibold mb-4 text-gray-900 dark:text-white">USDA Soil Texture</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6">
@@ -49,7 +49,8 @@ export default function AboutSoil() {
             informed decisions about how land should be used.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Sand Soil Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/soil/Sandy-soil.jpg" 
                 alt="Sand Soil" 
@@ -58,7 +59,8 @@ export default function AboutSoil() {
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Sand</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm">Quick drainage, low in nutrients, warms rapidly.</p>
             </div>
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Loam Soil Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/soil/loam-soil.jpg" 
                 alt="Loam Soil" 
@@ -67,7 +69,8 @@ export default function AboutSoil() {
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Loam</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm">Balanced texture with excellent fertility and drainage.</p>
             </div>
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Clay Soil Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/soil/clay-soil.jpg" 
                 alt="Clay Soil" 
@@ -89,7 +92,8 @@ export default function AboutSoil() {
             loose soils that allow roots to spread easily.
           </p>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Rice Crop Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/crops/rice.jpeg" 
                 alt="Rice" 
@@ -98,7 +102,8 @@ export default function AboutSoil() {
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Rice</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm">Prefers clay and silty soils with excellent water retention.</p>
             </div>
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Banana Crop Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/crops/banana.jpg" 
                 alt="Banana" 
@@ -107,7 +112,8 @@ export default function AboutSoil() {
               <h3 className="font-semibold text-lg text-gray-900 dark:text-white">Banana</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm">Thrives in loam and sandy loam with good drainage.</p>
             </div>
-            <div className="p-5 bg-white dark:bg-gray-800 shadow-md rounded-xl hover:shadow-lg transition">
+            {/* Corn Crop Card */}
+            <div className="p-5 bg-white dark:bg-gray-800 shadow-xl rounded-xl hover:shadow-2xl transition duration-300 transform hover:scale-105">
               <img 
                 src="images/crops/corn.jpeg" 
                 alt="Corn" 
