@@ -44,7 +44,7 @@ export default function AboutSoil() {
 
         {/* ⭐ Why Soil Study Matters */}
         <div className="max-w-7xl mx-auto px-6 mt-24">
-          <h2 className="text-4xl font-[Merriweather] font-semibold text-gray-900 dark:text-white text-center mb-12">
+          <h2 className="text-3xl font-[Merriweather] font-semibold text-gray-900 dark:text-white text-center mb-12">
             Why Soil Study Matters
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
