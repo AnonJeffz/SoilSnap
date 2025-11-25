@@ -19,7 +19,7 @@ export function useSignUp() {
 
   const loginGoogle = async () => {
         const base = import.meta.env.VITE_API_URL || "";
-        window.location.href = `${base}/auth/google`;
+        window.location.href = `${base}/api/auth/google`;
     }
 
 
@@ -29,19 +29,25 @@ export function useSignUp() {
               return value.trim() === '' ? 'First name is required' : '';
           case 'lastname':
               return value.trim() === '' ? 'Last name is required' : '';
-          case
-              'email': {
+          case 'email': {
               const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
               return emailRegex.test(value) ? '' : 'Invalid email address';
           }
           case 'role':
               return value === '' ? 'Role is required' : '';
-          case 'password':
-              return value.trim() === '' ? 'Password is required' : '';
+          case 'password': {
+              if (value.trim() === '') return 'Password is required';
+              // Regex for strong password
+              const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+              return strongPasswordRegex.test(value)
+                  ? ''
+                  : 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character';
+          }
           default:
               return '';
       }
   };
+
     
   const [error, setError] = useState(data);
   const [newUser, setNewUser] = useState(data);
