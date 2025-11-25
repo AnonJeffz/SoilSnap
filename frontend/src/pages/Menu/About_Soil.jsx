@@ -3,55 +3,53 @@ import Navbar from '../../components/header/Navbar';
 import { useState } from 'react';
 
 export default function AboutSoil() {
-   const [downloading, setDownloading] = useState(false);
-    const [progress, setProgress] = useState(0);
+  const [downloading, setDownloading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-    const handleDownload = async () => {
-      const base = import.meta.env.VITE_API_URL || "";
-      const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
+  const handleDownload = async () => {
+    const base = import.meta.env.VITE_API_URL || "";
+    const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
 
-      try {
-        setDownloading(true);
-        setProgress(0);
+    try {
+      setDownloading(true);
+      setProgress(0);
 
-        const response = await fetch(apkUrl);
-        if (!response.ok) throw new Error('Download failed');
+      const response = await fetch(apkUrl);
+      if (!response.ok) throw new Error('Download failed');
 
-        const reader = response.body!.getReader();
-        const contentLength = +response.headers.get('Content-Length')!;
-        let receivedLength = 0;
-        const chunks: Uint8Array[] = [];
+      const reader = response.body.getReader();
+      const contentLength = +response.headers.get('Content-Length');
+      let receivedLength = 0;
+      const chunks = [];
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          if (value) {
-            chunks.push(value);
-            receivedLength += value.length;
-            setProgress(Math.floor((receivedLength / contentLength) * 100));
-          }
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (value) {
+          chunks.push(value);
+          receivedLength += value.length;
+          setProgress(Math.floor((receivedLength / contentLength) * 100));
         }
-
-        // Combine chunks into a Blob
-        const blob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
-        const url = URL.createObjectURL(blob);
-
-        // Trigger download
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'SoilSnap.apk';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      } catch (err) {
-        console.error(err);
-        alert("Download failed. Please try again.");
-      } finally {
-        setDownloading(false);
-        setProgress(0);
       }
-    };
+
+      const blob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'SoilSnap.apk';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("Download failed. Please try again.");
+    } finally {
+      setDownloading(false);
+      setProgress(0);
+    }
+  };
 
   return (
     <>
