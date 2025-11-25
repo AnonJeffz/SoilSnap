@@ -26,10 +26,10 @@ export default function AboutSoil() {
         {/* ⭐ Hero Section */}
         <div className="w-full py-28 px-6 bg-gradient-to-br from-green-600 to-green-800 dark:from-gray-900 dark:to-gray-800 text-white relative overflow-hidden">
           <div className="max-w-4xl mx-auto text-center z-10 relative">
-            <h1 className="text-6xl md:text-7xl font-[Merriweather] font-bold drop-shadow-lg">
+            <h1 className="text-4xl font-[Merriweather] font-bold drop-shadow-lg">
               About Soil
             </h1>
-            <p className="text-lg md:text-xl mt-6 text-gray-100 leading-relaxed">
+            <p className="text-lg mt-6 text-gray-100 leading-relaxed">
               Soil is the foundation of ecosystems, agriculture, and human life.
               Understanding soil helps us protect the environment, grow healthier crops,
               and build a more sustainable future.
