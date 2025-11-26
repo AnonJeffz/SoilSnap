@@ -8,9 +8,14 @@ export default function AboutSoil() {
 
   const handleDownload = async () => {
     // Base URL to your API, if any (use fallback)
-    const base = import.meta.env.VITE_API_URL || ""; 
-    // Ensure .apk extension is included in the URL
+    const base = import.meta.env.VITE_API_URL || "";
     const apkUrl = base ? `${base}/apk/_SoilSnap_19282707.apk` : "/apk/_SoilSnap_19282707.apk"; 
+
+    // Ensure the APK URL is correct
+    if (!apkUrl) {
+      alert("APK URL is not valid.");
+      return;
+    }
 
     try {
       setDownloading(true);
@@ -18,39 +23,41 @@ export default function AboutSoil() {
 
       // Fetch the APK file
       const response = await fetch(apkUrl);
-      if (!response.ok) throw new Error('Download failed');
+      if (!response.ok) throw new Error('Download failed: Server responded with ' + response.status);
 
-      // Read the APK file's content
+      // Read the APK file's content as a stream
       const reader = response.body.getReader();
       const contentLength = +response.headers.get('Content-Length');
       let receivedLength = 0;
       const chunks = [];
 
-      // Stream the file content
+      // Stream the file content and update the progress
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         if (value) {
           chunks.push(value);
           receivedLength += value.length;
-          setProgress(Math.floor((receivedLength / contentLength) * 100)); // Update progress
+          setProgress(Math.floor((receivedLength / contentLength) * 100)); // Update download progress
         }
       }
 
-      // Create a blob for the APK file
+      // Create a Blob from the chunks
       const blob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
       const url = URL.createObjectURL(blob);
 
-      // Create a link element to trigger the download
+      // Create a temporary download link and trigger the download
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'SoilSnap.apk';  // Ensure the file name is correct
+      link.download = 'SoilSnap.apk'; // Ensure the correct filename for download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
       // Clean up the blob URL
       URL.revokeObjectURL(url);
+
+      alert('Download successful!');
     } catch (err) {
       console.error(err);
       alert("Download failed. Please try again.");
