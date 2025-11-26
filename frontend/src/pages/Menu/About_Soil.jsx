@@ -7,40 +7,49 @@ export default function AboutSoil() {
   const [progress, setProgress] = useState(0);
 
   const handleDownload = async () => {
-    const base = import.meta.env.VITE_API_URL || "";
-    const apkUrl = base ? `${base}/apk/_SoilSnap_19282707` : "/apk/_SoilSnap_19282707";
+    // Base URL to your API, if any (use fallback)
+    const base = import.meta.env.VITE_API_URL || ""; 
+    // Ensure .apk extension is included in the URL
+    const apkUrl = base ? `${base}/apk/_SoilSnap_19282707.apk` : "/apk/_SoilSnap_19282707.apk"; 
 
     try {
       setDownloading(true);
       setProgress(0);
 
+      // Fetch the APK file
       const response = await fetch(apkUrl);
       if (!response.ok) throw new Error('Download failed');
 
+      // Read the APK file's content
       const reader = response.body.getReader();
       const contentLength = +response.headers.get('Content-Length');
       let receivedLength = 0;
       const chunks = [];
 
+      // Stream the file content
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         if (value) {
           chunks.push(value);
           receivedLength += value.length;
-          setProgress(Math.floor((receivedLength / contentLength) * 100));
+          setProgress(Math.floor((receivedLength / contentLength) * 100)); // Update progress
         }
       }
 
+      // Create a blob for the APK file
       const blob = new Blob(chunks, { type: 'application/vnd.android.package-archive' });
       const url = URL.createObjectURL(blob);
 
+      // Create a link element to trigger the download
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'SoilSnap.apk';
+      link.download = 'SoilSnap.apk';  // Ensure the file name is correct
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      // Clean up the blob URL
       URL.revokeObjectURL(url);
     } catch (err) {
       console.error(err);
@@ -73,7 +82,7 @@ export default function AboutSoil() {
             </p>
           </div>
           <div className="absolute top-0 left-0 w-full h-full">
-            {/* subtle abstract shapes */}
+            {/* Subtle abstract shapes */}
             <div className="absolute w-96 h-96 bg-green-500 opacity-10 rounded-full -top-24 -left-24"></div>
             <div className="absolute w-72 h-72 bg-green-400 opacity-10 rounded-full -bottom-24 -right-16"></div>
           </div>
@@ -113,7 +122,7 @@ export default function AboutSoil() {
             {[
               { img: 'images/soil/Sandy-soil.jpg', title: 'Sand', desc: 'Drains quickly, warms fast.' },
               { img: 'images/soil/loam-soil.jpg', title: 'Loam', desc: 'Balanced & fertile.' },
-              { img: 'images/soil/clay-soil.jpg', title: 'Clay', desc: 'Dense, nutrient rich.' },
+              { img: 'images/soil/clay-soil.jpg', title: 'Clay', desc: 'Dense, nutrient-rich.' },
             ].map((soil, idx) => (
               <div key={idx} className="group relative overflow-hidden p-5 bg-white dark:bg-gray-800 shadow-xl rounded-3xl transition transform hover:scale-105 hover:shadow-2xl">
                 <img src={soil.img} alt={soil.title} className="w-full h-48 object-cover rounded-xl mb-4" />
