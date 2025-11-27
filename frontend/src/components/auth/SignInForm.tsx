@@ -1,4 +1,6 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
@@ -8,6 +10,7 @@ import { useSignIn  } from "../../hooks/useSignIn";
 import LoadingSpinner from "../ui/spinner/LoadingSpinner";
 
 export default function SignInForm() {
+  const [searchParams] = useSearchParams();
 
   const {showPassword,
         isChecked,
@@ -19,6 +22,24 @@ export default function SignInForm() {
         handleSignIn,
         error,
       } = useSignIn();
+
+  // Check for email verification success
+  useEffect(() => {
+    if (searchParams.get('verified') === 'true') {
+      toast.success('✓ Email verified successfully! Please sign in to continue.', {
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'light',
+      });
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, '/signin');
+    }
+  }, [searchParams]);
 
     if (isLoading) {
         return (
