@@ -1,7 +1,7 @@
 import User from "../models/user-model.js";
 import mail from "../config/mail.js";
 import crypto from "crypto";
-import { encrypt} from "../util/Security.js";
+import { encrypt } from "../util/Security.js";
 import fs from "fs";
 import path from "path";
 
@@ -103,6 +103,10 @@ export const createUser = async (req, res) => {
     await mail.sendMail(details);
 
     await newUser.save();
+    
+    console.log('✅ User created successfully:', newUser.email);
+    console.log('🔗 Verification URL:', verifyUrl);
+    
     res.status(201).json({ 
       success: true, 
       message: "User created successfully. Please check your email to verify your account.", 
@@ -114,6 +118,7 @@ export const createUser = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('❌ Error creating user:', error);
     res.status(400).json({ 
       success: false, 
       message: "Error creating user", 
@@ -125,8 +130,9 @@ export const createUser = async (req, res) => {
 export const verifyUser = async (req, res) => {
   const { token } = req.params;
   
-  console.log('=== VERIFICATION ATTEMPT ===');
-  console.log('Token:', token);
+  console.log('\n=== EMAIL VERIFICATION ATTEMPT ===');
+  console.log('📧 Token received:', token);
+  console.log('🕒 Timestamp:', new Date().toISOString());
   
   try {
     const user = await User.findOne({ verificationToken: token });
@@ -181,11 +187,14 @@ export const verifyUser = async (req, res) => {
       `);
     }
     
+    console.log('✅ User found:', user.email);
+    
     user.isVerify = true;
     user.verificationToken = undefined;
     await user.save();
     
     console.log('✅ User verified successfully:', user.email);
+    console.log('=================================\n');
     
     res.status(200).send(`
       <html>
@@ -238,6 +247,7 @@ export const verifyUser = async (req, res) => {
     `);
   } catch (error) {
     console.error('❌ Verification error:', error);
+    console.log('=================================\n');
     res.status(500).send(`
       <html>
         <head>
@@ -326,7 +336,7 @@ export const updateUser = async (req, res) => {
     user.firstname = firstname;
     user.middlename = middlename;
     user.lastname = lastname;
-    user.role = role,
+    user.role = role;
     user.email = email;
     user.phone = phone;
     user.address = address;
@@ -340,7 +350,7 @@ export const updateUser = async (req, res) => {
   }  
 }
 
-export const getUserCount = async ( req, res ) => {
+export const getUserCount = async (req, res) => {
   try {
     const userCount = await User.countDocuments();
     res.status(200).json({ userCount });
@@ -349,7 +359,7 @@ export const getUserCount = async ( req, res ) => {
   }
 }
 
-export const getSoilExpertCount = async( req, res ) => {
+export const getSoilExpertCount = async (req, res) => {
   try {
     const count = await User.countDocuments({ role: 'Soil Expert' });
     res.status(200).json({ count });
