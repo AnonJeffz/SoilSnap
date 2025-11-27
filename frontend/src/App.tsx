@@ -33,16 +33,9 @@ import LogsView from "./pages/LogPage/Logs";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
 import { seedRecommendationsIfMissing } from "./lib/seed-recommendations";
-import { useLocation } from "react-router";
 
 function AppContent() {
   usePasswordResetCleanup();
-  const location = useLocation();
-
-  // Don't render React routes for API calls
-  if (location.pathname.startsWith('/api/')) {
-    return null;
-  }
 
   return (
     <Routes>
@@ -127,6 +120,11 @@ export default function App() {
   useEffect(() => {
     seedRecommendationsIfMissing();
   }, []);
+
+  // CRITICAL: Don't render React app at all for API routes
+  if (window.location.pathname.startsWith('/api/')) {
+    return null;
+  }
     
   return (
     <GoogleOAuthProvider clientId="180485865427-eccplulce91kki9p3f05i9pr63a9b8j9.apps.googleusercontent.com">
