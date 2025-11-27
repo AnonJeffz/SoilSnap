@@ -18,11 +18,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.get("/count", countCrops);
-router.post('/create', verifyToken, requireAdmin, upload.single("image"), createCrop)
+router.post('/create', verifyToken, upload.single("image"), createCrop)
 router.get("/", getCrop);
 router.post("/recommendation", getRecommendation);
-router.delete("/:id", verifyToken, requireAdmin, deleteCrop);
-router.patch("/:id", verifyToken, requireAdmin, upload.single("image"), editCrop);
+router.delete("/:id", verifyToken, deleteCrop);
+router.patch("/:id", verifyToken, upload.single("image"), editCrop);
 router.get("/:id", viewCrop);
 
 export default router;

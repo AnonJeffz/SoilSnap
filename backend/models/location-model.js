@@ -20,6 +20,9 @@ const soilLocationSchema = new mongoose.Schema({
     number: {
         type: String,
         required: false
+    },
+    action: {
+         type: String,
     }
 }, {
   timestamps: true,

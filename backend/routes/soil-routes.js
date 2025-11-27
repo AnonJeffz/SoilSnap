@@ -17,10 +17,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-router.post("/upload", upload.single("image"), verifyToken, requireAdmin, createSoil);
+router.post("/upload", upload.single("image"), verifyToken, createSoil);
 router.get("/", getSoil);
-router.put("/:id", upload.single("image"), verifyToken, requireAdmin, editSoil);
-router.delete("/:id", verifyToken, requireAdmin, deleteSoil);
+router.put("/:id", upload.single("image"), verifyToken, editSoil);
+router.delete("/:id", verifyToken, deleteSoil);
 router.get('/count', countSoil);
 router.get('/:id', viewSoil);
 
