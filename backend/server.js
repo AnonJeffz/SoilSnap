@@ -69,7 +69,7 @@ app.use("/uploads/profile", express.static("backend/uploads/profile"));
 app.use("/uploads/location", express.static("backend/uploads/location"));
 
 
-app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.use(express.static(path.join(__dirname, "frontend/dist")));
 
 app.get("/sw.js", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
@@ -77,13 +77,13 @@ app.get("/sw.js", (req, res) => {
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
 });
-app.get("*", (req, res) => {
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-});
+})
 
 
 app.listen(5000, () => {
   connectDB();
-  console.log("Server started at http://localhost:5000");
+  console.log("Server started at https://soilsnap-production.up.railway.app");
 });
 
