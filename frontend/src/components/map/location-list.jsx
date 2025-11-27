@@ -69,11 +69,18 @@ export default function Location() {
     const [locationId, setLocationId] = useState(null);
 
     const getId = (location) => {
-        setLocationId(location._id);
-        if(location.latitude != null && location.longitude != null) {
-            setClickedPos([Number(location.latitude), Number(location.longitude)]);
+        if(user.roleVerify == "true")
+        {
+            setLocationId(location._id);
+            if(location.latitude != null && location.longitude != null) {
+                setClickedPos([Number(location.latitude), Number(location.longitude)]);
+            }
+            openModal();
         }
-        openModal();
+        else
+        {
+            toast.success("This account is not yet verify!");
+        }
     }
 
     const handleGetCoordinates = async (event) => {

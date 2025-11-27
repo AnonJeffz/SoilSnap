@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  roleVerify:{
+    type: String,
+  },
   address: {
     type: String,
     required: false,

@@ -82,24 +82,6 @@ app.get("*", (req, res) => {
 });
 
 
-if (typeof transporter?.verify === 'function') {
-  // nodemailer transporter
-  transporter.verify()
-    .then(() => console.log('Mail transporter verified: SMTP connection OK'))
-    .catch(err => console.error('Mail transporter verification failed:', err && err.message ? err.message : err));
-} else if (typeof transporter?.sendMail === 'function') {
-  // SendGrid wrapper (or similar) — perform a one-off test send (temporary)
-  const testAddr = process.env.SENDGRID_FROM || process.env.EMAIL_USER;
-  transporter.sendMail({
-    from: process.env.SENDGRID_FROM || process.env.EMAIL_USER,
-    to: testAddr,
-    subject: 'SoilSnap: mailer test',
-    text: 'If you receive this, the mailer is configured correctly.',
-  })
-    .then(() => console.log('Mail wrapper test send succeeded'))
-    .catch(err => console.error('Mail wrapper test failed:', err && err.message ? err.message : err));
-}
-
 app.listen(5000, () => {
   connectDB();
   console.log("Server started at http://localhost:5000");

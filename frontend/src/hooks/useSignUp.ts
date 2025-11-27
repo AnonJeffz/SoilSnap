@@ -14,7 +14,8 @@ export function useSignUp() {
     lastname: '',
     email: '',
     password: '',
-    role: 'User',
+    role: 'Soil Expert',
+    roleVerify: '',
   };  
 
   const loginGoogle = async () => {
@@ -91,7 +92,8 @@ export function useSignUp() {
         lastname: newUser.lastname,
         firstname: newUser.firstname,
         password: newUser.password,
-        role: "User"
+        role: 'Soil Expert',
+        roleVerify: "false"
       };
 
       const success = await signup(userData);
@@ -102,7 +104,8 @@ export function useSignUp() {
           lastname: '',
           email: '',
           password: '',
-          role: 'User',
+          role: 'Soil Expert',
+          roleVerify: "false"
         });
         // Redirect to login page after successful signup
         navigate('/signin');

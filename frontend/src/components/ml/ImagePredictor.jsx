@@ -25,11 +25,6 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-function italicizeSample(text) {
-  if (!text) return "";
-  return text.replace(/\bsample\b/gi, "<i>sample</i>");
-}
-
 function LocationMarker({ setClickedPos }) {
   const [markerPos, setMarkerPos] = useState(null);
   const map = useMapEvents({
@@ -190,6 +185,10 @@ function Predictor() {
     setImagePreview(null);
     openCamera();
   };
+  function italicizeSample(text) {
+    if (!text) return "";
+    return text.replace(/\bsample\b/gi, "<i>sample</i>");
+  }
 
   return (
     <>

@@ -10,6 +10,7 @@ interface User {
   lastname: string;
   isVerified: boolean;
   role: string;
+  roleVerify: string;
   phone: string;
   address: string;
   profile: string;
