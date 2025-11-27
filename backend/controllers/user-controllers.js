@@ -139,9 +139,14 @@ export const verifyUser = async (req, res) => {
     
     if (!user) {
       console.log('❌ No user found with this token');
+      res.setHeader('Content-Type', 'text/html');
       return res.status(404).send(`
+        <!DOCTYPE html>
         <html>
           <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Invalid Verification Link</title>
             <style>
               body {
                 font-family: Arial, sans-serif;
@@ -196,10 +201,15 @@ export const verifyUser = async (req, res) => {
     console.log('✅ User verified successfully:', user.email);
     console.log('=================================\n');
     
-    res.status(200).send(`
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(200).send(`
+      <!DOCTYPE html>
       <html>
         <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin" />
+          <title>Email Verified Successfully</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -248,9 +258,14 @@ export const verifyUser = async (req, res) => {
   } catch (error) {
     console.error('❌ Verification error:', error);
     console.log('=================================\n');
-    res.status(500).send(`
+    res.setHeader('Content-Type', 'text/html');
+    return res.status(500).send(`
+      <!DOCTYPE html>
       <html>
         <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Verification Error</title>
           <style>
             body {
               font-family: Arial, sans-serif;
