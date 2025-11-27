@@ -72,7 +72,9 @@ export default function SoilList() {
                     <div className="flex items-center justify-center" key={index}>
                         <div className="max-w-lg rounded overflow-hidden shadow-lg">
                             <div className="relative">
-                                <img className="w-full h-80" src={soil.image} alt={soil.name} />
+                                <Link to={`/soil/${soil._id}`}>
+                                    <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={soil.image} alt={soil.name} />
+                                </Link>
                                 {(user.role == "Admin" || user.role == "Soil Expert") && (
                                     <div className="absolute top-2 right-2 z-20">
                                         <button
