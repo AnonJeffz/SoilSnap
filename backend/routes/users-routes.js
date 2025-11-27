@@ -20,7 +20,7 @@ const upload = multer({ storage });
 const router = express.Router();
 
 router.post("/", createUser); 
-router.get("/:token", verifyUser); 
+router.get("/verify/:token", verifyUser); 
 
 router.get("/me", verifyToken, getUser);
 router.get("/all", verifyToken, requireAdmin, getAllUsers);
