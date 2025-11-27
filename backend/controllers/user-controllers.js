@@ -45,6 +45,7 @@ export const getAllUsers = async (req, res) => {
     const users = await User.find().select('-password -verificationToken');
     const verifiedUsers = users.filter(user => user.isVerify === true);
     
+
     const sanitizedUsers = verifiedUsers.map(user => ({
       _id: user._id,
       firstname: user.firstname,
@@ -87,9 +88,7 @@ export const createUser = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString("hex");
     newUser.verificationToken = verificationToken;
 
-    // Same URL for everything
-    const baseUrl = "https://soilsnap-production.up.railway.app";
-    const verifyUrl = `${baseUrl}/api/users/verify/${verificationToken}`;
+    const verifyUrl = `https://soilsnap-production.up.railway.app/api/users/verify/${verificationToken}`;
 
     const details = {
       from: process.env.SENDGRID_FROM,
@@ -126,144 +125,23 @@ export const createUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   const { token } = req.params;
-  
-  console.log('Attempting to verify token:', token); // Debug log
-  
   try {
     const user = await User.findOne({ verificationToken: token });
-    
-    if (!user) {
-      console.log('No user found with token:', token); // Debug log
-      return res.status(404).send(`
-        <html>
-          <head>
-            <style>
-              body {
-                font-family: Arial, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background: #f5f5f5;
-              }
-              .container {
-                text-align: center;
-                background: white;
-                padding: 40px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-              }
-              h1 { color: #e74c3c; }
-              a {
-                display: inline-block;
-                margin-top: 20px;
-                padding: 10px 20px;
-                background: #2563eb;
-                color: white;
-                text-decoration: none;
-                border-radius: 6px;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>❌ Invalid Verification Link</h1>
-              <p>This verification link is invalid or has already been used.</p>
-              <a href="https://soilsnap-production.up.railway.app/signup">Register Again</a>
-            </div>
-          </body>
-        </html>
-      `);
-    }
-    
     user.isVerify = true;
     user.verificationToken = undefined;
     await user.save();
-    
-    console.log('User verified successfully:', user.email); // Debug log
-    
-    // Same URL for redirect
     res.status(200).send(`
       <html>
         <head>
-          <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin" />
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100vh;
-              margin: 0;
-              background: #f5f5f5;
-            }
-            .container {
-              text-align: center;
-              background: white;
-              padding: 40px;
-              border-radius: 10px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            h1 { color: #27ae60; }
-            .spinner {
-              margin: 20px auto;
-              width: 40px;
-              height: 40px;
-              border: 4px solid #f3f3f3;
-              border-top: 4px solid #2563eb;
-              border-radius: 50%;
-              animation: spin 1s linear infinite;
-            }
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          </style>
+          <meta http-equiv="refresh" content="0;url=https://soilsnap-production.up.railway.app/signin" />
         </head>
         <body>
-          <div class="container">
-            <h1>✓ Email Verified Successfully!</h1>
-            <p>Your email has been verified. Redirecting to login page...</p>
-            <div class="spinner"></div>
-          </div>
+          <p>Verification successful! Redirecting to login page...</p>
         </body>
       </html>
     `);
   } catch (error) {
-    console.error('Verification error:', error); // Debug log
-    res.status(500).send(`
-      <html>
-        <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100vh;
-              margin: 0;
-              background: #f5f5f5;
-            }
-            .container {
-              text-align: center;
-              background: white;
-              padding: 40px;
-              border-radius: 10px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            h1 { color: #e74c3c; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>⚠️ Verification Error</h1>
-            <p>An error occurred while verifying your email. Please try again or contact support.</p>
-            <p style="color: #666; font-size: 12px;">${error.message}</p>
-          </div>
-        </body>
-      </html>
-    `);
+    res.status(500).json({ message: "Error verifying user", error: error.message });
   }
 }
 
@@ -280,6 +158,8 @@ export const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Error deleting user", error: error.message });
   }
 }
+
+// ...existing code...
 
 export const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -324,6 +204,7 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: "Error updating user", error: error.message });
   }  
 }
+
 
 export const getUserCount = async ( req, res ) => {
   try {
