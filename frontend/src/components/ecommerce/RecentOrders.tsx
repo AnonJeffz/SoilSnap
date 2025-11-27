@@ -19,10 +19,10 @@ interface Product {
   soil_classification: string;
 }
 
-
 export default function RecentOrders() {
   const { user } = useAuth();
   const [soilData, setSoilData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch soil classification data from the backend API
@@ -30,9 +30,11 @@ export default function RecentOrders() {
       .get("/api/location") // Adjust the endpoint as needed
       .then((response) => {
         setSoilData(response.data.reverse().slice(0, 6));
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching soil classification data:", error);
+        setLoading(false);
       });
   }, []);
 
@@ -45,7 +47,7 @@ export default function RecentOrders() {
           </h3>
         </div>
 
-        { user && user.role === 'Admin' && (
+        {user && user.role === "Admin" && (
           <div className="flex items-center gap-3">
             <Link
               to="/soil-location"
@@ -57,58 +59,69 @@ export default function RecentOrders() {
         )}
       </div>
       <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
-            <TableRow>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Soil Classification
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Date
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Latitude
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Longitude
-              </TableCell>
-            </TableRow>
-          </TableHeader>
-
-          {/* Table Body */}
-
-          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {soilData.map((product) => (
-              <TableRow key={product._id} className="">
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.soil_classification}
+        {loading ? (
+          <div className="py-12 text-center">
+            <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+          </div>
+        ) : soilData.length === 0 ? (
+          <div className="py-12 text-center">
+            <p className="text-gray-500 dark:text-gray-400">
+              No recent soil classifications found.
+            </p>
+          </div>
+        ) : (
+          <Table>
+            {/* Table Header */}
+            <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+              <TableRow>
+                <TableCell
+                  isHeader
+                  className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Soil Classification
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {new Date(product.createdAt).toLocaleString()}
+                <TableCell
+                  isHeader
+                  className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Date
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.latitude}
+                <TableCell
+                  isHeader
+                  className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Latitude
                 </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {product.longitude}
+                <TableCell
+                  isHeader
+                  className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Longitude
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+
+            {/* Table Body */}
+            <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+              {soilData.map((product) => (
+                <TableRow key={product._id} className="">
+                  <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {product.soil_classification}
+                  </TableCell>
+                  <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {new Date(product.createdAt).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {product.latitude}
+                  </TableCell>
+                  <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                    {product.longitude}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );
