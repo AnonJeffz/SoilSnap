@@ -81,7 +81,6 @@ app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 })
 
-
 app.listen(5000, () => {
   connectDB();
   console.log("Server started at https://soilsnap-production.up.railway.app");
