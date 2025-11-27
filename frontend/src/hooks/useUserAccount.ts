@@ -16,7 +16,7 @@ export function useUserAccount() {
         email: '',
         role: '',
         password: '',
-        roleVerify: '',
+        roleVerify: 'true',
       }
 
       const [error, setError] = useState(data);
@@ -44,6 +44,8 @@ export function useUserAccount() {
                 return value === '' ? 'Role is required' : '';
             case 'password':
                 return value.trim() === '' ? 'Password is required' : '';
+            case 'roleVerify':
+                return value.trim() === '' ? 'roleVerify is required' : '';
             default:
                 return '';
         }
@@ -57,6 +59,7 @@ export function useUserAccount() {
             email: validateField('email', newUser.email),
             role: validateField('role', newUser.role),
             password: validateField('password', newUser.password),
+            roleVerify: validateField('roleVerify', newUser.roleVerify),
         };
 
         setError(validationErrors);
