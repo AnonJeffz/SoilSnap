@@ -52,6 +52,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+//app.use("/auth", auth);
 
 app.use("/api/users", user);
 app.use("/api/auth", auth);
@@ -76,12 +77,14 @@ app.get("/sw.js", (req, res) => {
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
 });
-app.get(/^\/(?!api|uploads).*/, (req, res) => {
-  res.sendFile(path.resolve(process.cwd(), "frontend/dist/index.html"));
-});
+
+app.get(/^\/(?!api).*/, (req, res) => {
+  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+})
+
 
 app.listen(5000, () => {
   connectDB();
-  console.log("Server started at https://soilsnap-production.up.railway.app");
+  console.log("Server started at http://localhost:5000");
 });
 
