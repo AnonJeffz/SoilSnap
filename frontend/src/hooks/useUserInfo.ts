@@ -59,10 +59,8 @@ export function useUserInfo() {
               return value.trim() === '' ? 'First name is required' : '';
           case 'lastname':
               return value.trim() === '' ? 'Last name is required' : '';
-          case 'phone': {
-              const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-              return phoneRegex.test(value) ? '' : 'Invalid phone number';
-          }
+          case 'phone': 
+              return value.trim() === '' ? 'Phone Number is required' : '';
           case 'address':
               return value.trim() === '' ? 'Address is required' : '';
           case 'postalcode':
