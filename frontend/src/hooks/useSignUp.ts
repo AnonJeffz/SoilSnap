@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 
 export function useSignUp() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -121,8 +120,6 @@ export function useSignUp() {
   return {
     showPassword,
     setShowPassword,
-    isChecked,
-    setIsChecked,
     isLoading,
     newUser,
     setNewUser,
