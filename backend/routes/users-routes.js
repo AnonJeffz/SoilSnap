@@ -17,13 +17,29 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 const router = express.Router();
 
-// IMPORTANT: More specific routes MUST come before dynamic routes
+// CRITICAL: Add logging middleware for debugging
+router.use((req, res, next) => {
+  console.log(`[USER ROUTE] ${req.method} ${req.path}`);
+  next();
+});
+
+// IMPORTANT: Most specific routes FIRST, before any dynamic routes
 router.get("/count", getUserCount);
 router.get("/soil-expert-count", getSoilExpertCount);
-router.get("/verify/:token", verifyUser); 
-router.get("/me", verifyToken, getUser);
 router.get("/all", verifyToken, requireAdmin, getAllUsers);
-router.post("/", createUser); 
+router.get("/me", verifyToken, getUser);
+
+// EMAIL VERIFICATION - Must be before /:id route
+router.get("/verify/:token", (req, res, next) => {
+  console.log("🔍 VERIFY ROUTE HIT!");
+  console.log("Token:", req.params.token);
+  next();
+}, verifyUser);
+
+// POST routes
+router.post("/", createUser);
+
+// Dynamic routes LAST
 router.patch("/:id", upload.single("profile"), updateUser);
 router.delete("/:id", verifyToken, requireAdmin, deleteUser);
 
