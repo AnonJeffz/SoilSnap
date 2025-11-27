@@ -140,11 +140,80 @@ export const verifyUser = async (req, res) => {
     if (!user) {
       console.log('❌ No user found with this token');
       
-      // Set headers to prevent any interference
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       
-      const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Invalid Link</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#e74c3c;margin-bottom:20px;font-size:24px}p{color:#666;line-height:1.6;margin-bottom:15px}a{display:inline-block;margin-top:20px;padding:12px 24px;background:#2563eb;color:white;text-decoration:none;border-radius:6px;font-weight:bold}a:hover{background:#1d4ed8}</style></head><body><div class="container"><h1>❌ Invalid Verification Link</h1><p>This verification link is invalid or has already been used.</p><p>If you need to verify your email, please register again or contact support.</p><a href="https://soilsnap-production.up.railway.app/signup">Register Again</a></div></body></html>`;
+      const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Invalid Link</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 500px;
+      animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #e74c3c;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">❌</div>
+    <h1>Invalid Verification Link</h1>
+    <p>This verification link is invalid or has already been used.</p>
+    <p>If you need to verify your email, please register again or contact support.</p>
+    <a href="https://soilsnap-production.up.railway.app/signup">Register Again</a>
+  </div>
+</body>
+</html>`;
       
       return res.status(404).send(html);
     }
@@ -158,11 +227,117 @@ export const verifyUser = async (req, res) => {
     console.log('✅ User verified successfully:', user.email);
     console.log('=================================\n');
     
-    // Set headers to prevent any interference
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     
-    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin"><title>Email Verified</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#27ae60;margin-bottom:20px;font-size:24px}p{color:#666;line-height:1.6;margin-bottom:10px}.spinner{margin:20px auto;width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid #2563eb;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style></head><body><div class="container"><h1>✓ Email Verified Successfully!</h1><p>Your email has been verified. You can now log in to your account.</p><p style="font-size:14px;color:#999">Redirecting to login page in 3 seconds...</p><div class="spinner"></div></div></body></html>`;
+    // MODIFIED: Redirect to signin page with a success message
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin?verified=true">
+  <title>Email Verified</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 500px;
+      animation: slideIn 0.5s ease-out;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: bounce 1s ease infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    h1 {
+      color: #27ae60;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+    p {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .spinner {
+      margin: 20px auto;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #f3f3f3;
+      border-radius: 2px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      animation: progress 3s linear;
+    }
+    @keyframes progress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">✓</div>
+    <h1>Email Verified Successfully!</h1>
+    <p>Your email has been verified. You can now log in to your account.</p>
+    <p style="font-size: 14px; color: #999;">
+      Redirecting to login page in <span id="countdown">3</span> seconds...
+    </p>
+    <div class="spinner"></div>
+    <div class="progress-bar">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+  <script>
+    let seconds = 3;
+    const countdown = document.getElementById('countdown');
+    const interval = setInterval(() => {
+      seconds--;
+      countdown.textContent = seconds;
+      if (seconds <= 0) {
+        clearInterval(interval);
+      }
+    }, 1000);
+  </script>
+</body>
+</html>`;
     
     return res.status(200).send(html);
     
@@ -170,11 +345,55 @@ export const verifyUser = async (req, res) => {
     console.error('❌ Verification error:', error);
     console.log('=================================\n');
     
-    // Set headers to prevent any interference
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     
-    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Error</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#e74c3c;font-size:24px;margin-bottom:20px}p{color:#666;line-height:1.6;margin-bottom:15px}.error{background:#fee;padding:10px;border-radius:4px;margin-top:15px;font-size:12px;color:#c33}</style></head><body><div class="container"><h1>⚠️ Verification Error</h1><p>An error occurred while verifying your email. Please try again or contact support.</p><div class="error">${error.message}</div></div></body></html>`;
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Error</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      max-width: 500px;
+    }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { color: #e74c3c; font-size: 24px; margin-bottom: 20px; }
+    p { color: #666; line-height: 1.6; margin-bottom: 15px; }
+    .error {
+      background: #fee;
+      padding: 10px;
+      border-radius: 4px;
+      margin-top: 15px;
+      font-size: 12px;
+      color: #c33;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">⚠️</div>
+    <h1>Verification Error</h1>
+    <p>An error occurred while verifying your email. Please try again or contact support.</p>
+    <div class="error">${error.message}</div>
+  </div>
+</body>
+</html>`;
     
     return res.status(500).send(html);
   }
