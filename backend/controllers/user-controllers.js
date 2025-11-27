@@ -139,57 +139,14 @@ export const verifyUser = async (req, res) => {
     
     if (!user) {
       console.log('❌ No user found with this token');
-      res.setHeader('Content-Type', 'text/html');
-      return res.status(404).send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Invalid Verification Link</title>
-            <style>
-              body {
-                font-family: Arial, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background: #f5f5f5;
-              }
-              .container {
-                text-align: center;
-                background: white;
-                padding: 40px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                max-width: 500px;
-              }
-              h1 { color: #e74c3c; margin-bottom: 20px; }
-              p { color: #666; line-height: 1.6; }
-              a {
-                display: inline-block;
-                margin-top: 20px;
-                padding: 12px 24px;
-                background: #2563eb;
-                color: white;
-                text-decoration: none;
-                border-radius: 6px;
-                font-weight: bold;
-              }
-              a:hover { background: #1d4ed8; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>❌ Invalid Verification Link</h1>
-              <p>This verification link is invalid or has already been used.</p>
-              <p>If you need to verify your email, please register again or contact support.</p>
-              <a href="https://soilsnap-production.up.railway.app/signup">Register Again</a>
-            </div>
-          </body>
-        </html>
-      `);
+      
+      // Set headers to prevent any interference
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      
+      const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Invalid Link</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#e74c3c;margin-bottom:20px;font-size:24px}p{color:#666;line-height:1.6;margin-bottom:15px}a{display:inline-block;margin-top:20px;padding:12px 24px;background:#2563eb;color:white;text-decoration:none;border-radius:6px;font-weight:bold}a:hover{background:#1d4ed8}</style></head><body><div class="container"><h1>❌ Invalid Verification Link</h1><p>This verification link is invalid or has already been used.</p><p>If you need to verify your email, please register again or contact support.</p><a href="https://soilsnap-production.up.railway.app/signup">Register Again</a></div></body></html>`;
+      
+      return res.status(404).send(html);
     }
     
     console.log('✅ User found:', user.email);
@@ -201,110 +158,25 @@ export const verifyUser = async (req, res) => {
     console.log('✅ User verified successfully:', user.email);
     console.log('=================================\n');
     
-    res.setHeader('Content-Type', 'text/html');
-    return res.status(200).send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin" />
-          <title>Email Verified Successfully</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100vh;
-              margin: 0;
-              background: #f5f5f5;
-            }
-            .container {
-              text-align: center;
-              background: white;
-              padding: 40px;
-              border-radius: 10px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-              max-width: 500px;
-            }
-            h1 { color: #27ae60; margin-bottom: 20px; }
-            p { color: #666; line-height: 1.6; }
-            .spinner {
-              margin: 20px auto;
-              width: 40px;
-              height: 40px;
-              border: 4px solid #f3f3f3;
-              border-top: 4px solid #2563eb;
-              border-radius: 50%;
-              animation: spin 1s linear infinite;
-            }
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>✓ Email Verified Successfully!</h1>
-            <p>Your email has been verified. You can now log in to your account.</p>
-            <p style="font-size: 14px; color: #999;">Redirecting to login page in 3 seconds...</p>
-            <div class="spinner"></div>
-          </div>
-        </body>
-      </html>
-    `);
+    // Set headers to prevent any interference
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin"><title>Email Verified</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#27ae60;margin-bottom:20px;font-size:24px}p{color:#666;line-height:1.6;margin-bottom:10px}.spinner{margin:20px auto;width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid #2563eb;border-radius:50%;animation:spin 1s linear infinite}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style></head><body><div class="container"><h1>✓ Email Verified Successfully!</h1><p>Your email has been verified. You can now log in to your account.</p><p style="font-size:14px;color:#999">Redirecting to login page in 3 seconds...</p><div class="spinner"></div></div></body></html>`;
+    
+    return res.status(200).send(html);
+    
   } catch (error) {
     console.error('❌ Verification error:', error);
     console.log('=================================\n');
-    res.setHeader('Content-Type', 'text/html');
-    return res.status(500).send(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Verification Error</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100vh;
-              margin: 0;
-              background: #f5f5f5;
-            }
-            .container {
-              text-align: center;
-              background: white;
-              padding: 40px;
-              border-radius: 10px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-              max-width: 500px;
-            }
-            h1 { color: #e74c3c; }
-            p { color: #666; line-height: 1.6; }
-            .error { 
-              background: #fee;
-              padding: 10px;
-              border-radius: 4px;
-              margin-top: 15px;
-              font-size: 12px;
-              color: #c33;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>⚠️ Verification Error</h1>
-            <p>An error occurred while verifying your email. Please try again or contact support.</p>
-            <div class="error">${error.message}</div>
-          </div>
-        </body>
-      </html>
-    `);
+    
+    // Set headers to prevent any interference
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Error</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f5f5f5;padding:20px}.container{text-align:center;background:white;padding:40px;border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);max-width:500px}h1{color:#e74c3c;font-size:24px;margin-bottom:20px}p{color:#666;line-height:1.6;margin-bottom:15px}.error{background:#fee;padding:10px;border-radius:4px;margin-top:15px;font-size:12px;color:#c33}</style></head><body><div class="container"><h1>⚠️ Verification Error</h1><p>An error occurred while verifying your email. Please try again or contact support.</p><div class="error">${error.message}</div></div></body></html>`;
+    
+    return res.status(500).send(html);
   }
 }
 
