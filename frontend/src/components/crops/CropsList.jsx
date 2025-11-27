@@ -80,15 +80,10 @@ export default function Crop() {
                         
                         <div className="max-w-lg rounded overflow-hidden shadow-lg">
                             <div className="relative">
-<<<<<<< HEAD
                                 <Link to={`/crops/${crop._id}`}>
                                     <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={crop.image} alt={crop.name} />
                                 </Link>
-                                {(user.role == "Admin" || user.role == "Soil Expert") && (
-=======
-                                <img className="w-full h-80" src={crop.image} alt={crop.name} />
-                                {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true") ) && (
->>>>>>> 621e7e8 (removing the User Role)
+                                {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true")) && (
                                     <div className="absolute top-2 right-2 z-20">
                                         <button
                                             className="dropdown-toggle bg-white/80 rounded-full p-1 shadow"

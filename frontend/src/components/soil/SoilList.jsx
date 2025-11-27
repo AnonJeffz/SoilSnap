@@ -72,15 +72,10 @@ export default function SoilList() {
                     <div className="flex items-center justify-center" key={index}>
                         <div className="max-w-lg rounded overflow-hidden shadow-lg">
                             <div className="relative">
-<<<<<<< HEAD
                                 <Link to={`/soil/${soil._id}`}>
                                     <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={soil.image} alt={soil.name} />
                                 </Link>
-                                {(user.role == "Admin" || user.role == "Soil Expert") && (
-=======
-                                <img className="w-full h-80" src={soil.image} alt={soil.name} />
-                                {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true") ) && (
->>>>>>> 621e7e8 (removing the User Role)
+                                {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true")) && (
                                     <div className="absolute top-2 right-2 z-20">
                                         <button
                                             className="dropdown-toggle bg-white/80 rounded-full p-1 shadow"
