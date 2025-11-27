@@ -160,6 +160,7 @@ export const changeRole = async(req, res) => {
 
         if (user) {
             user.role = "Soil Expert";
+            user.roleVerify = "true";
             await user.save();
              await createLog({
                 user_id: req.user?._id,

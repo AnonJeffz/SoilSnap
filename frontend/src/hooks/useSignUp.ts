@@ -75,6 +75,7 @@ export function useSignUp() {
       email: validateField('email', newUser.email),
       role: validateField('role', newUser.role),
       password: validateField('password', newUser.password),
+      roleVerify: validateField('roleVerify', newUser.roleVerify),
     };
 
     setError(validationErrors);

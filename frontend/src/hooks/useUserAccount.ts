@@ -16,13 +16,13 @@ export function useUserAccount() {
         email: '',
         role: '',
         password: '',
+        roleVerify: '',
       }
 
       const [error, setError] = useState(data);
       const [newUser, setNewUser] = useState(data);
 
       const options = [
-        { value: "User", label: "User" },
         { value: "Admin", label: "Admin" },
         { value: "Soil Expert", label: "Soil Expert" },
       ];
@@ -77,6 +77,7 @@ export function useUserAccount() {
             email: '',
             password: '',
             role: '',
+            roleVerify: 'true',
           });
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response?.data?.message) {  
@@ -91,6 +92,7 @@ export function useUserAccount() {
                     lastname: errorField === 'lastname' ? errorMessage : '',
                     role: errorField === 'role' ? errorMessage : '',
                     password: errorField === 'password' ? errorMessage : '',
+                    roleVerify: errorField === 'roleVerify' ? errorMessage : '',
                 });
             } else {
                 otherError= true;
