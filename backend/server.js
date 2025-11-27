@@ -12,13 +12,12 @@ import location from "./routes/location-routes.js"
 import logs from "./routes/logs-routes.js"
 import { generalLimiter } from "./middleware/rateLimiter.js";
 import passport from "passport";
-import "./services/passport.js"; // Import the passport configuration
+import "./services/passport.js";
 import session from "express-session";
 import transporter from "./config/mail.js";
 import path from "path";
 
 dotenv.config();
-
 const app = express();
 app.set('trust proxy', 1);
 
@@ -28,7 +27,7 @@ app.use(cors({
     "http://localhost:5173",
     "https://soilsnap-production.up.railway.app",
   ],
-  credentials: true, // Enable cookies/credentials
+  credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -52,8 +51,8 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-//app.use("/auth", auth);
 
+// IMPORTANT: API routes MUST come BEFORE static files and catch-all
 app.use("/api/users", user);
 app.use("/api/auth", auth);
 app.use("/api/soil", soilRoutes);
@@ -62,29 +61,35 @@ app.use("/api/request", request);
 app.use("/api/location", location);
 app.use("/api/logs", logs);
 
+// Static file routes
 app.use("/uploads/soil", express.static("backend/uploads/soil"));
 app.use("/uploads/crops", express.static("backend/uploads/crops"));
 app.use("/uploads/request", express.static("backend/uploads/request"));
 app.use("/uploads/profile", express.static("backend/uploads/profile"));
 app.use("/uploads/location", express.static("backend/uploads/location"));
 
-
+// Serve React static files
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
+// Service worker and manifest
 app.get("/sw.js", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
 });
+
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
 });
 
-app.get(/^\/(?!api).*/, (req, res) => {
+// IMPORTANT: This catch-all MUST be last and MUST properly exclude /api routes
+app.get("*", (req, res, next) => {
+  // Only serve index.html for non-API routes
+  if (req.path.startsWith('/api/')) {
+    return next(); // Let it 404 if API route not found
+  }
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-})
-
+});
 
 app.listen(5000, () => {
   connectDB();
   console.log("Server started at http://localhost:5000");
 });
-
