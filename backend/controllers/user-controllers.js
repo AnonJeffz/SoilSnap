@@ -144,9 +144,10 @@ export const verifyUser = async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       
       const html = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invalid Link</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -232,9 +233,10 @@ export const verifyUser = async (req, res) => {
     
     // MODIFIED: Redirect to signin page with a success message
     const html = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin?verified=true">
   <title>Email Verified</title>
   <style>
@@ -349,9 +351,10 @@ export const verifyUser = async (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     
     const html = `<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Error</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -398,7 +401,6 @@ export const verifyUser = async (req, res) => {
     return res.status(500).send(html);
   }
 }
-
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
