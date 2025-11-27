@@ -76,9 +76,9 @@ app.get("/sw.js", (req, res) => {
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
 });
-app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-})
+app.get(/^\/(?!api|uploads).*/, (req, res) => {
+  res.sendFile(path.resolve(process.cwd(), "frontend/dist/index.html"));
+});
 
 app.listen(5000, () => {
   connectDB();
