@@ -161,7 +161,9 @@ export default function Location() {
                                                         {user.role === 'Admin' && (
                                                             <button onClick={() => handleDelete(location._id)} className="text-red-500 hover:text-red-700"><TrashBinIcon className="inline-block w-4 h-4" /></button>
                                                         )}
-                                                        <button onClick={() => getId(location)} className="text-success-500 hover:text-success-700"><Navigate className="inline-block w-4 h-4 transform scale-x-[-1]" /></button>
+                                                        {location.imageSource === "Capture" && (
+                                                            <button onClick={() => getId(location)} className="text-success-500 hover:text-success-700"><Navigate className="inline-block w-4 h-4 transform scale-x-[-1]" /></button>
+                                                        )}
                                                     </div>
                                                 </TableCell>
                                             </TableRow>
