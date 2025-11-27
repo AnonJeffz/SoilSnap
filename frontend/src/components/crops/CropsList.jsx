@@ -80,7 +80,9 @@ export default function Crop() {
                         
                         <div className="max-w-lg rounded overflow-hidden shadow-lg">
                             <div className="relative">
-                                <img className="w-full h-80" src={crop.image} alt={crop.name} />
+                                <Link to={`/crops/${crop._id}`}>
+                                    <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={crop.image} alt={crop.name} />
+                                </Link>
                                 {(user.role == "Admin" || user.role == "Soil Expert") && (
                                     <div className="absolute top-2 right-2 z-20">
                                         <button
@@ -165,7 +167,7 @@ export default function Crop() {
                                             name="images"
                                             error={!!error.image}
                                             hint={error.image}
-                                            onChange={handleImageChange} // Use the new handler
+                                            onChange={handleImageChange}
                                             className="text-sm file:bg-gray-200 file:text-gray-700 dark:file:bg-gray-700 dark:file:text-gray-300 file:px-4 file:border-0 file:rounded-lg file:mr-4 hover:file:bg-gray-300 dark:hover:file:bg-gray-600"
                                         />
                                     </div>
