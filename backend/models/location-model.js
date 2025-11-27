@@ -21,7 +21,7 @@ const soilLocationSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    action: {
+    imageSource: {
          type: String,
     }
 }, {

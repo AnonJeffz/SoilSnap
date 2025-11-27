@@ -110,7 +110,7 @@ function Predictor() {
     capturePhoto,
     closeCamera
   } = useCamera();
-
+  const [imageSource, setImageSource] = useState(null);
   const [pos] = useState([10.3333, 125.1667]); // Default center
   const [clickedPos, setClickedPos] = useState(null);
   const API_BASE = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/$/, "") : "";
@@ -147,6 +147,7 @@ function Predictor() {
       formData.append("soil_classification", prediction.prediction);
       formData.append("latitude", clickedPos[0]);
       formData.append("longitude", clickedPos[1]);
+      formData.append("imageSource", imageSource);
       if (selectedImage) {
         formData.append("image", selectedImage);
       }
@@ -174,11 +175,13 @@ function Predictor() {
       setSelectedImage(capturedFile);
       setImagePreview(URL.createObjectURL(capturedFile));
       setError("");
+      setImageSource("camera");
     }
   };
    
   const handleFileSelect = (e) => {
     handleImageSelect(e);
+    setImageSource("upload");
     closeCamera();
   };
 
