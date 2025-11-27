@@ -140,19 +140,24 @@ export const verifyUser = async (req, res) => {
     if (!user) {
       console.log('❌ No user found with this token');
       
+      // Set headers to prevent React from interfering
       res.setHeader('Content-Type', 'text/html; charset=utf-8');
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
       
       const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>Invalid Link</title>
   <style>
+    /* Reset to prevent any inherited styles */
+    html, body { margin: 0; padding: 0; height: 100%; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -181,11 +186,13 @@ export const verifyUser = async (req, res) => {
       color: #e74c3c;
       margin-bottom: 20px;
       font-size: 24px;
+      font-weight: 600;
     }
     p {
       color: #666;
       line-height: 1.6;
       margin-bottom: 15px;
+      font-size: 16px;
     }
     a {
       display: inline-block;
@@ -228,21 +235,25 @@ export const verifyUser = async (req, res) => {
     console.log('✅ User verified successfully:', user.email);
     console.log('=================================\n');
     
+    // Set headers to prevent React from interfering
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     
-    // MODIFIED: Redirect to signin page with a success message
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="3;url=https://soilsnap-production.up.railway.app/signin?verified=true">
+  <meta name="robots" content="noindex">
   <title>Email Verified</title>
   <style>
+    /* Reset to prevent any inherited styles */
+    html, body { margin: 0; padding: 0; height: 100%; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -276,11 +287,13 @@ export const verifyUser = async (req, res) => {
       color: #27ae60;
       margin-bottom: 20px;
       font-size: 24px;
+      font-weight: 600;
     }
     p {
       color: #666;
       line-height: 1.6;
       margin-bottom: 10px;
+      font-size: 16px;
     }
     .spinner {
       margin: 20px auto;
@@ -311,6 +324,10 @@ export const verifyUser = async (req, res) => {
     @keyframes progress {
       from { width: 0%; }
       to { width: 100%; }
+    }
+    #countdown {
+      font-weight: bold;
+      color: #2563eb;
     }
   </style>
 </head>
@@ -347,19 +364,24 @@ export const verifyUser = async (req, res) => {
     console.error('❌ Verification error:', error);
     console.log('=================================\n');
     
+    // Set headers to prevent React from interfering
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     
     const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>Error</title>
   <style>
+    /* Reset to prevent any inherited styles */
+    html, body { margin: 0; padding: 0; height: 100%; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -375,9 +397,22 @@ export const verifyUser = async (req, res) => {
       box-shadow: 0 10px 40px rgba(0,0,0,0.2);
       max-width: 500px;
     }
-    .icon { font-size: 64px; margin-bottom: 20px; }
-    h1 { color: #e74c3c; font-size: 24px; margin-bottom: 20px; }
-    p { color: #666; line-height: 1.6; margin-bottom: 15px; }
+    .icon { 
+      font-size: 64px; 
+      margin-bottom: 20px; 
+    }
+    h1 { 
+      color: #e74c3c; 
+      font-size: 24px; 
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    p { 
+      color: #666; 
+      line-height: 1.6; 
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
     .error {
       background: #fee;
       padding: 10px;
@@ -385,6 +420,7 @@ export const verifyUser = async (req, res) => {
       margin-top: 15px;
       font-size: 12px;
       color: #c33;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -401,6 +437,7 @@ export const verifyUser = async (req, res) => {
     return res.status(500).send(html);
   }
 }
+
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
