@@ -161,7 +161,7 @@ export default function Location() {
                                                         {user.role === 'Admin' && (
                                                             <button onClick={() => handleDelete(location._id)} className="text-red-500 hover:text-red-700"><TrashBinIcon className="inline-block w-4 h-4" /></button>
                                                         )}
-                                                        {location.imageSource === "Capture" && (
+                                                        {(location.imageSource === "upload" && user.role === 'Soil Expert') && (
                                                             <button onClick={() => getId(location)} className="text-success-500 hover:text-success-700"><Navigate className="inline-block w-4 h-4 transform scale-x-[-1]" /></button>
                                                         )}
                                                     </div>
