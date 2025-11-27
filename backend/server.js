@@ -54,7 +54,8 @@ app.use(passport.session());
 
 // Debug middleware - logs all incoming requests
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  console.log(`\n[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  console.log(`Full URL: ${req.protocol}://${req.get('host')}${req.originalUrl}`);
   next();
 });
 
@@ -88,10 +89,15 @@ app.get("/manifest.json", (req, res) => {
 
 // IMPORTANT: This catch-all MUST be last and MUST properly exclude /api routes
 app.get("*", (req, res, next) => {
+  console.log("📍 Catch-all route hit for:", req.path);
+  
   // Only serve index.html for non-API routes
   if (req.path.startsWith('/api/')) {
+    console.log("❌ API route not found:", req.path);
     return next(); // Let it 404 if API route not found
   }
+  
+  console.log("✅ Serving index.html");
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 });
 
@@ -114,3 +120,5 @@ app.listen(5000, () => {
   console.log("   ✓ /uploads/location");
   console.log("\n🔍 Debug: Request logging enabled\n");
 });
+
+
