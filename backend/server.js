@@ -16,9 +16,11 @@ import "./services/passport.js";
 import session from "express-session";
 import transporter from "./config/mail.js";
 import path from "path";
+
 dotenv.config();
 const app = express();
 app.set('trust proxy', 1);
+
 // CORS configuration
 app.use(cors({
   origin: [
@@ -29,11 +31,14 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 // Middleware
 app.use(cookieParser()); 
 app.use(express.json()); 
 app.use(generalLimiter);
+
 const __dirname = path.resolve();
+
 app.use(session({
   secret: process.env.GOOGLE_CLIENT_SECRET,
   resave: false,
@@ -43,6 +48,7 @@ app.use(session({
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -67,15 +73,19 @@ app.use("/uploads/crops", express.static("backend/uploads/crops"));
 app.use("/uploads/request", express.static("backend/uploads/request"));
 app.use("/uploads/profile", express.static("backend/uploads/profile"));
 app.use("/uploads/location", express.static("backend/uploads/location"));
+
 // Serve React static files
 app.use(express.static(path.join(__dirname, "frontend/dist")));
+
 // Service worker and manifest
 app.get("/sw.js", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
 });
+
 app.get("/manifest.json", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
 });
+
 // IMPORTANT: This catch-all MUST be last and MUST properly exclude /api routes
 app.get("*", (req, res, next) => {
   // Only serve index.html for non-API routes
@@ -84,6 +94,7 @@ app.get("*", (req, res, next) => {
   }
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 });
+
 app.listen(5000, () => {
   connectDB();
   console.log("Server started at http://localhost:5000");
