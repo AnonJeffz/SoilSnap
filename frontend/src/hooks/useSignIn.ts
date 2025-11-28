@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import {useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
+import api from "../utils/api";
 
 export function useSignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -17,9 +18,14 @@ export function useSignIn() {
     const [error, setError] = useState(data);
 
     const loginGoogle = async () => {
-        const base = import.meta.env.VITE_API_URL || "";
-        window.location.href = `${base}/auth/google`;
-    }
+        try {
+            const response = await api.get(`/api/auth/google`);
+            console.log(response.data); 
+        } catch (error) {
+            console.error("Google Auth Error:", error);
+        }
+    };
+
 
     const validateField = (name: string, value: string) => {
         switch (name) {
