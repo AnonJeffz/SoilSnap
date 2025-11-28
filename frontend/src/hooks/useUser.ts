@@ -56,7 +56,6 @@ export function useUsers(searchTerm: string) {
     };
 
   const options = [
-    { value: "User", label: "User" },
     { value: "Admin", label: "Admin" },
     { value: "Soil Expert", label: "Soil Expert" },
   ];
