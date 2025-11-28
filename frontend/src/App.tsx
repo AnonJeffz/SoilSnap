@@ -112,7 +112,7 @@ function AppContent() {
           </Route>
 
           {/* Fallback Route */}
-          <Route path="*" element={<NotFound />} />
+          {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
   );
 }
