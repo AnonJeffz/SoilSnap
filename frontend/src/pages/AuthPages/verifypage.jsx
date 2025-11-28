@@ -1,5 +1,5 @@
 import PageMeta from "../../components/common/PageMeta";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router";
 
 export default function VerifyPage() {
     const query = new URLSearchParams(useLocation().search);
