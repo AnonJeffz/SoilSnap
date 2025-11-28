@@ -185,18 +185,18 @@ self.addEventListener("fetch", (event) => {
   }
 
   // API/JSON network-first
-  // if (url.includes("/api/") || url.includes("/auth/") || url.includes("/uploads/") || url.includes("/socket/")) {
-  //   return event.respondWith(
-  //     fetch(req).catch(async () => {
-  //       const accept = req.headers.get("Accept") || "";
-  //       if (accept.includes("application/json") || req.headers.get("Content-Type")?.includes("application/json")) {
-  //         return new Response(JSON.stringify({ error: "offline" }), { status: 503, headers: { "Content-Type": "application/json" } });
-  //       }
-  //       const cached = await caches.match(req);
-  //       return cached || caches.match(OFFLINE_PAGE);
-  //     })
-  //   );
-  // }
+  if (url.includes("/api/") || url.includes("/auth/") || url.includes("/uploads/") || url.includes("/socket/")) {
+    return event.respondWith(
+      fetch(req).catch(async () => {
+        const accept = req.headers.get("Accept") || "";
+        if (accept.includes("application/json") || req.headers.get("Content-Type")?.includes("application/json")) {
+          return new Response(JSON.stringify({ error: "offline" }), { status: 503, headers: { "Content-Type": "application/json" } });
+        }
+        const cached = await caches.match(req);
+        return cached || caches.match(OFFLINE_PAGE);
+      })
+    );
+  }
 
   // SPA navigation
   if (req.mode === "navigate") {
