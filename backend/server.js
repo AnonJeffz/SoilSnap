@@ -71,12 +71,12 @@ app.use("/uploads/location", express.static("backend/uploads/location"));
 
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-app.get("/sw.js", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
-});
-app.get("/manifest.json", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
-});
+// app.get("/sw.js", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "frontend", "dist", "sw.js"));
+// });
+// app.get("/manifest.json", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "frontend", "dist", "manifest.json"));
+// });
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
