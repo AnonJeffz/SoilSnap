@@ -1,21 +1,18 @@
 import rateLimit from 'express-rate-limit';
 
-// Login rate limiter - more restrictive
 export const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 5 login requests per windowMs
+    windowMs: 60 * 1000, 
+    max: 5, 
     message: {
-        error: "Too many login attempts from this IP, please try again after 15 minutes."
+        error: "Too many login attempts from this IP, please try again after 60 seconds."
     },
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    // Skip successful requests
+    standardHeaders: true, 
+    legacyHeaders: false, 
     skipSuccessfulRequests: true,
-    // Custom key generator (optional) - you can use IP + email for more granular control
     keyGenerator: (req) => {
-        return req.ip; // Rate limit by IP address
+        return req.ip; 
     },
-    // Optional: Custom handler for when limit is exceeded
+
     handler: (req, res) => {
         res.status(429).json({
             success: false,
@@ -25,9 +22,8 @@ export const loginLimiter = rateLimit({
     }
 });
 
-// General API rate limiter - less restrictive
 export const generalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000, 
     max: 1000, 
     message: {
         error: "Too many requests from this IP, please try again later."
@@ -36,10 +32,9 @@ export const generalLimiter = rateLimit({
     legacyHeaders: false,
 });
 
-// Password reset rate limiter
 export const passwordResetLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 3, // Limit each IP to 3 password reset requests per hour
+    windowMs: 60 * 60 * 1000,
+    max: 3, 
     message: {
         error: "Too many password reset attempts from this IP, please try again after 1 hour."
     },
