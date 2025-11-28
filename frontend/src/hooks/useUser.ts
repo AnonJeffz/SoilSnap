@@ -16,6 +16,7 @@ interface User {
   createdAt: string;
   updatedAt: string;
   profile: string;
+  roleVerify: string;
 }
 
 export function useUsers(searchTerm: string) {
