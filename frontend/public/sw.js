@@ -1,12 +1,7 @@
-// ===============================
-// SERVICE WORKER CONFIG
-// ===============================
-
-const CACHE_NAME_STATIC = "soil-snap-static-v4";
-const CACHE_NAME_RUNTIME = "soil-snap-runtime-v4";
+const CACHE_NAME_STATIC = "soil-snap-static-v3";
+const CACHE_NAME_RUNTIME = "soil-snap-runtime-v3";
 const CACHE_NAME_IMAGES = "soil-snap-images-v1";
 const OFFLINE_PAGE = "/offline.html";
-
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -17,10 +12,7 @@ const APP_SHELL = [
   "/fallback-crop.png"
 ];
 
-// ===============================
-// INDEXED DB HELPERS
-// ===============================
-
+// === IndexedDB Helpers ===
 function idbOpen() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open("soil_snap_db", 1);
@@ -28,7 +20,6 @@ function idbOpen() {
       const db = e.target.result;
       if (!db.objectStoreNames.contains("pending"))
         db.createObjectStore("pending", { keyPath: "id", autoIncrement: true });
-
       if (!db.objectStoreNames.contains("data"))
         db.createObjectStore("data", { keyPath: "id" });
     };
@@ -41,8 +32,10 @@ async function getAllPendingSW() {
   const db = await idbOpen();
   return new Promise((res, rej) => {
     const tx = db.transaction("pending", "readonly");
-    tx.objectStore("pending").getAll().onsuccess = (e) => res(e.target.result);
-    tx.onerror = () => rej(tx.error);
+    const store = tx.objectStore("pending");
+    const req = store.getAll();
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
   });
 }
 
@@ -56,19 +49,18 @@ async function deletePendingSW(id) {
   });
 }
 
+// === Broadcast Messages to Clients ===
 async function broadcastMessage(msg) {
-  const clients = await self.clients.matchAll({ includeUncontrolled: true });
-  for (const client of clients) client.postMessage(msg);
+  const all = await self.clients.matchAll({ includeUncontrolled: true });
+  for (const client of all) {
+    client.postMessage(msg);
+  }
 }
 
-// ===============================
-// PROCESS QUEUE
-// ===============================
-
+// === Process Pending Queue ===
 async function processQueue() {
   const items = await getAllPendingSW();
   await broadcastMessage({ type: "SW_SYNC_START", total: items.length });
-
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
     try {
@@ -78,45 +70,22 @@ async function processQueue() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(op.body || {})
       };
-
       const resp = await fetch(op.url, init);
-
       if (resp && resp.ok) {
         await deletePendingSW(item.id);
-        await broadcastMessage({
-          type: "SW_SYNC_PROGRESS",
-          index: i + 1,
-          total: items.length,
-          id: item.id,
-          ok: true
-        });
+        await broadcastMessage({ type: "SW_SYNC_PROGRESS", index: i + 1, total: items.length, id: item.id, ok: true });
       } else {
-        await broadcastMessage({
-          type: "SW_SYNC_PROGRESS",
-          index: i + 1,
-          total: items.length,
-          id: item.id,
-          ok: false,
-          status: resp?.status
-        });
+        await broadcastMessage({ type: "SW_SYNC_PROGRESS", index: i + 1, total: items.length, id: item.id, ok: false, status: resp && resp.status });
       }
     } catch (err) {
-      await broadcastMessage({
-        type: "SW_SYNC_ERROR",
-        index: i + 1,
-        total: items.length,
-        err: String(err)
-      });
+      await broadcastMessage({ type: "SW_SYNC_ERROR", index: i + 1, total: items.length, err: String(err) });
       return;
     }
   }
   await broadcastMessage({ type: "SW_SYNC_DONE" });
 }
 
-// ===============================
-// PREFETCH SOIL RECOMMENDATIONS
-// ===============================
-
+// === Seed Recommendations in Background ===
 async function seedRecommendationsInBackground() {
   const soils = ["Clay","Loam","Loamy Sand","Sand","Sandy Clay Loam","Sandy Loam","Silt","Silty Clay","Silty Loam"];
   const db = await idbOpen();
@@ -126,26 +95,20 @@ async function seedRecommendationsInBackground() {
       const tx = db.transaction("data","readonly");
       tx.objectStore("data").get(`crop-rec-${soil}`).onsuccess = e => res(!!e.target.result);
     });
-
     if (!exists) {
       try {
         const res = await fetch("https://soilsnap-production.up.railway.app/api/crop/recommendation", {
           method: "POST",
-          headers: { "Content-Type":"application/json" },
-          body: JSON.stringify({ soil })
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify({ soil }),
         });
-
         if (res.ok) {
           const json = await res.json();
           const tx = db.transaction("data","readwrite");
-          tx.objectStore("data").put({
-            id: `crop-rec-${soil}`,
-            soil,
-            recommendations: json.recommendations || []
-          });
+          tx.objectStore("data").put({ id: `crop-rec-${soil}`, soil, recommendations: json.recommendations || [] });
           await broadcastMessage({ type: "SOIL_PREFETCH_PROGRESS", soil });
         }
-      } catch (e) {
+      } catch(e) {
         console.warn("SW seed failed for", soil, e);
       }
     }
@@ -154,10 +117,7 @@ async function seedRecommendationsInBackground() {
   await broadcastMessage({ type: "SOIL_PREFETCH_DONE" });
 }
 
-// ===============================
-// INSTALL
-// ===============================
-
+// === Install Event ===
 self.addEventListener("install", (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME_STATIC);
@@ -166,21 +126,17 @@ self.addEventListener("install", (event) => {
   })());
 });
 
-// ===============================
-// ACTIVATE
-// ===============================
-
+// === Activate Event ===
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
     const keys = await caches.keys();
-    await Promise.all(
-      keys
-        .filter(k => ![CACHE_NAME_STATIC, CACHE_NAME_RUNTIME, CACHE_NAME_IMAGES].includes(k))
-        .map(old => caches.delete(old))
+    await Promise.all(keys
+      .filter(k => ![CACHE_NAME_STATIC, CACHE_NAME_RUNTIME, CACHE_NAME_IMAGES].includes(k))
+      .map(oldKey => caches.delete(oldKey))
     );
 
-    if ("sync" in self.registration) {
-      await self.registration.sync.register("soil-snap-seed");
+    if ('sync' in self.registration) {
+      await self.registration.sync.register('soil-snap-seed');
     } else {
       seedRecommendationsInBackground();
     }
@@ -189,103 +145,83 @@ self.addEventListener("activate", (event) => {
   })());
 });
 
-// ===============================
-// BACKGROUND SYNC
-// ===============================
-
+// === Background Sync Listener ===
 self.addEventListener("sync", (event) => {
   if (event.tag === "soil-snap-sync") event.waitUntil(processQueue());
   if (event.tag === "soil-snap-seed") event.waitUntil(seedRecommendationsInBackground());
 });
 
-// ===============================
-// MESSAGE
-// ===============================
-
+// === Message Handler ===
 self.addEventListener("message", (evt) => {
-  if (evt.data?.type === "PROCESS_QUEUE") evt.waitUntil(processQueue());
+  if (evt.data && evt.data.type === "PROCESS_QUEUE") {
+    evt.waitUntil(processQueue());
+  }
 });
 
-// ===============================
-// FETCH
-// ===============================
-
+// === Fetch Event ===
 self.addEventListener("fetch", (event) => {
   const req = event.request;
-  const url = req.url;
+  const url = new URL(req.url);
 
-  // ================================================
-  // 🔥 CRITICAL FIX: DO NOT TOUCH EMAIL VERIFICATION
-  // ================================================
-  if (url.includes("/api/users/verify/")) {
-    return event.respondWith(fetch(req));
+  // --- EXCLUDE API verification route ---
+  if (url.pathname.startsWith("/api/users/verify")) return;
+
+  // Skip large models
+  if (url.pathname.includes("/models/") || url.pathname.endsWith(".bin") || url.pathname.endsWith(".wasm") || url.pathname.endsWith(".map")) return;
+
+  // Images cache-first
+  if (url.pathname.startsWith("/uploads/crops")) {
+    event.respondWith(cacheFirst(req, CACHE_NAME_IMAGES));
+    return;
   }
 
-  // Always bypass SW for ALL API CALLS
-  if (url.includes("/api/") || url.includes("/auth/") || url.includes("/socket/")) {
-    return event.respondWith(fetch(req));
-  }
-
-  // Ignore large ML models
-  if (url.includes("/models/") || url.endsWith(".bin") || url.endsWith(".wasm") || url.endsWith(".map")) return;
-
-  // Images: cache first
-  if (url.includes("/uploads/crops/")) {
-    return event.respondWith((async () => {
-      try {
-        const cache = await caches.open(CACHE_NAME_IMAGES);
-        const cached = await cache.match(req);
-        if (cached) return cached;
-
-        const response = await fetch(req);
-        if (response.ok) cache.put(req, response.clone());
-        return response;
-      } catch {
-        return new Response(null, { status: 503, statusText: "offline" });
-      }
-    })());
+  // API network-first
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/") || url.pathname.startsWith("/uploads/") || url.pathname.startsWith("/socket/")) {
+    event.respondWith(networkFirst(req));
+    return;
   }
 
   // SPA navigation
   if (req.mode === "navigate") {
-    return event.respondWith(
+    event.respondWith(
       fetch(req)
         .then(resp => {
-          if (resp.ok) caches.open(CACHE_NAME_RUNTIME).then(c => c.put(req, resp.clone()));
+          if (resp && resp.ok) caches.open(CACHE_NAME_RUNTIME).then(c => c.put(req, resp.clone()));
           return resp;
         })
-        .catch(() => caches.match("/index.html"))
+        .catch(() => caches.match("/index.html").then(r => r || caches.match(OFFLINE_PAGE)))
     );
+    return;
   }
 
-  // Static assets
-  const staticAssetRegex = /\.(?:js|css|png|jpg|jpeg|svg|ico|webp|woff2?)$/i;
-  if (staticAssetRegex.test(url)) {
-    return event.respondWith(
-      caches.match(req).then(async (cached) => {
-        if (cached) return cached;
-
-        try {
-          const resp = await fetch(req);
-          if (resp.ok) caches.open(CACHE_NAME_STATIC).then(c => c.put(req, resp.clone()));
-          return resp;
-        } catch {
-          return new Response(null, { status: 503, statusText: "offline" });
-        }
-      })
-    );
+  // Static assets cache-first
+  if (/\.(?:js|css|png|jpg|jpeg|svg|ico|webp|woff2?)$/i.test(url.pathname)) {
+    event.respondWith(cacheFirst(req, CACHE_NAME_STATIC));
+    return;
   }
 
-  // Default: network first
-  return event.respondWith(
-    fetch(req)
-      .then((resp) => {
-        if (resp.ok) caches.open(CACHE_NAME_RUNTIME).then(c => c.put(req, resp.clone()));
-        return resp;
-      })
-      .catch(async () => {
-        const cached = await caches.match(req);
-        return cached || new Response(null, { status: 503, statusText: "offline" });
-      })
-  );
+  // Default network-first fallback
+  event.respondWith(networkFirst(req));
 });
+
+// --- Helper Functions ---
+async function cacheFirst(req, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cached = await cache.match(req);
+  if (cached) return cached;
+  const resp = await fetch(req);
+  if (resp && resp.ok) await cache.put(req, resp.clone());
+  return resp;
+}
+
+async function networkFirst(req) {
+  try {
+    const resp = await fetch(req);
+    if (resp && resp.ok) caches.open(CACHE_NAME_RUNTIME).then(c => c.put(req, resp.clone()));
+    return resp;
+  } catch {
+    const cached = await caches.match(req);
+    if (cached) return cached;
+    return new Response(null, { status: 503, statusText: "offline" });
+  }
+}
