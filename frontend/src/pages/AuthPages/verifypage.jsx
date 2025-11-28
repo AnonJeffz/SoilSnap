@@ -49,9 +49,6 @@ export default function VerifyPage() {
                             <p className="text-gray-600 dark:text-gray-300 mt-3">
                                 Your SOILSNAP account is now verified.
                             </p>
-                            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
-                                Redirecting to dashboard in 5 seconds...
-                            </p>
                             <Link to="/home">
                                 <button className="mt-6 w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg">
                                     Go to Dashboard Now

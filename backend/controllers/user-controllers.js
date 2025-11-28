@@ -175,7 +175,7 @@ export const verifyUser = async (req, res) => {
             return res.status(404).json({ success: false, message: "Token invalid or expired" });
         }
 
-        user.isVerified = true;
+        user.isVerify = true;
         user.verificationToken = undefined;
         await user.save();
 
