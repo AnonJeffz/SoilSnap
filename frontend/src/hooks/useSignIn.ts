@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import {useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import api from "../utils/api";
+import axios from "axios";
 
 export function useSignIn() {
     const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +19,7 @@ export function useSignIn() {
 
     const loginGoogle = async () => {
         try {
-            const response = await api.get(`/api/auth/google`);
+            const response = await axios.get(`/api/auth/google`);
             console.log(response.data); 
         } catch (error) {
             console.error("Google Auth Error:", error);
