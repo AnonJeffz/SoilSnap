@@ -4,11 +4,11 @@ import Location from "../models/location-model.js";
 import { createLog } from './logs-controllers.js';
 
 export const createLocation = async (req, res) => {
-    const { soil_classification, latitude, longitude } = req.body;
+    const { soil_classification, latitude, longitude,imageSource  } = req.body;
     const image = req.file ? req.file.filename : null;
 
     try {
-        const newLocation = new Location({ soil_classification, latitude, longitude, image : `/uploads/location/${image}` });
+        const newLocation = new Location({ soil_classification, latitude, longitude, image : `/uploads/location/${image}`, imageSource });
         await newLocation.save();
         res.status(201).json({message: "Location created successfully", location: newLocation });
     } catch (error) {
