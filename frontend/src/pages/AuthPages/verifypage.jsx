@@ -28,14 +28,6 @@ export default function VerifyPage() {
         verifyAccount();
     }, [token]);
 
-    // Auto redirect to /home after 5 seconds if success
-    useEffect(() => {
-        if (status === "success") {
-            const timer = setTimeout(() => window.location.assign("/home"), 5000);
-            return () => clearTimeout(timer);
-        }
-    }, [status]);
-
     return (
         <>
             <PageMeta title="Verifying Email" description="Email verification" />
