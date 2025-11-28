@@ -71,11 +71,7 @@ function AppContent() {
           <NewPassword />
         </PublicRoute>
       } />
-      <Route path="/verify/:token" element={
-        <PublicRoute>
-          <VerifyPage />
-        </PublicRoute>
-      } />
+
 
           {/* Dashboard Layout - Protected Routes */}
           <Route element={
@@ -116,7 +112,11 @@ function AppContent() {
             <Route path="/soil/:id" element={<SoilDetailsPage />} />
             {/* Charts */}
           </Route>
-
+            <Route path="/verify/:token" element={
+              <PublicRoute>
+                <VerifyPage />
+              </PublicRoute>
+            } />
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
