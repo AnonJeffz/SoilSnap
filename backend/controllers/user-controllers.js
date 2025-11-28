@@ -93,13 +93,51 @@ export const createUser = async (req, res) => {
     const details = {
       from: process.env.SENDGRID_FROM,
       to: newUser.email,
-      subject: "Verify your email",
-      html: `<div style="text-align:center;margin-top:40px;">
-          <b>Welcome! Verify your email address to complete creating your account.</b><br>
-          <a style="display:inline-block;padding:10px 20px;background:#2563eb;color:#fff;text-decoration:none;border-radius:6px;font-weight:bold;margin-top:8px;" href="${verifyUrl}">
-            Click here to verify your email
-          </a>
-        </div>`,
+      subject: "Verify your SOILSNAP account",
+      html: `
+      <div style="font-family: 'Segoe UI', Roboto, sans-serif; background-color: #f0fdf4; padding: 40px 20px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+          
+          <!-- Header -->
+          <div style="background-color: #22c55e; padding: 20px; text-align: center;">
+            <h1 style="color: #fff; font-size: 28px; margin: 0;">SOILSNAP</h1>
+          </div>
+          
+          <!-- Body -->
+          <div style="padding: 30px; text-align: center;">
+            <h2 style="color: #166534; font-size: 22px; margin-bottom: 16px;">Welcome to SOILSNAP!</h2>
+            <p style="color: #4b5563; font-size: 16px; margin-bottom: 30px;">
+              Verify your email address to complete your account setup and start exploring SoilSnap.
+            </p>
+
+            <!-- Button -->
+            <a href="${verifyUrl}" style="
+              display: inline-block;
+              padding: 12px 25px;
+              background-color: #22c55e;
+              color: #ffffff;
+              text-decoration: none;
+              border-radius: 8px;
+              font-weight: 600;
+              font-size: 16px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+              transition: all 0.2s ease-in-out;
+            " onmouseover="this.style.backgroundColor='#16a34a'" onmouseout="this.style.backgroundColor='#22c55e'">
+              Verify My Account
+            </a>
+
+            <p style="margin-top: 25px; color: #6b7280; font-size: 14px;">
+              If you did not create a SoilSnap account, you can safely ignore this email.
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="background-color: #f0fdf4; padding: 15px; text-align: center; color: #4b5563; font-size: 12px;">
+            &copy; ${new Date().getFullYear()} SOILSNAP. All rights reserved.
+          </div>
+        </div>
+      </div>
+      `,
     };
     await mail.sendMail(details);
 
