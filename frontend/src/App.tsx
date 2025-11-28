@@ -71,7 +71,7 @@ function AppContent() {
           <NewPassword />
         </PublicRoute>
       } />
-      <Route path="/verify" element={
+      <Route path="/verify/:token" element={
         <PublicRoute>
           <VerifyPage />
         </PublicRoute>

@@ -88,7 +88,7 @@ export const createUser = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString("hex");
     newUser.verificationToken = verificationToken;
 
-    const verifyUrl = `https://soilsnap-production.up.railway.app/api/users/verify/${verificationToken}`;
+    const verifyUrl = `https://soilsnap-production.up.railway.app/verify/${verificationToken}`;
 
     const details = {
       from: process.env.SENDGRID_FROM,
@@ -124,38 +124,30 @@ export const createUser = async (req, res) => {
 }
 
 export const verifyUser = async (req, res) => {
-  const { token } = req.params;
+    const { token } = req.params;
 
-  try {
-    if (!token) {
-      return res.status(400).send("Invalid verification link.");
+    try {
+        if (!token) {
+            return res.status(400).json({ success: false, message: "Invalid verification link" });
+        }
+
+        const user = await User.findOne({ verificationToken: token });
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: "Token invalid or expired" });
+        }
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        await user.save();
+
+        return res.status(200).json({ success: true, message: "Account verified" });
+
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error" });
     }
-
-    const user = await User.findOne({ verificationToken: token });
-
-    if (!user) {
-      return res.status(404).send("Verification token is invalid or expired.");
-    }
-
-    user.isVerified = true;
-    user.verificationToken = undefined;
-    await user.save();
-
-    return res.status(200).send(`
-      <html>
-        <head>
-          <meta http-equiv="refresh" content="0;url=https://soilsnap-production.up.railway.app/verify?status=success" />
-        </head>
-        <body>
-          <p>Verification successful! Redirecting...</p>
-        </body>
-      </html>
-    `);
-
-  } catch (error) {
-    return res.status(500).send("Server error verifying user.");
-  }
 };
+
 
 
 export const deleteUser = async (req, res) => {
