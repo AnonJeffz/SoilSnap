@@ -44,6 +44,7 @@ export default function EcommerceMetrics() {
 
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 md:gap-6">
+      {(user?.role === "Admin") && (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
@@ -63,7 +64,8 @@ export default function EcommerceMetrics() {
           </Badge>
         </div>
       </div>
-     
+      )}
+      {(user?.role === "Admin" || user?.role === "Soil Expert") && (
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <Plant className="text-gray-800 size-6 dark:text-white/90" />
@@ -83,7 +85,7 @@ export default function EcommerceMetrics() {
           </Badge>
         </div>
       </div>
-
+      )}
       {user?.role === "Admin" && (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
@@ -105,7 +107,7 @@ export default function EcommerceMetrics() {
           </div>
         </div>
       )}
-      {user?.role === "User" && (
+      {(user?.role === "Admin" || user?.role === "Soil Expert") && (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
             <BoxCubeIcon className="text-gray-800 size-6 dark:text-white/90" />
