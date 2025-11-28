@@ -101,7 +101,7 @@ export default function UserTable({ searchTerm }: UserTableProps) {
                     <TableCell className="px-4 py-3 text-start text-theme-sm">
                       <Badge
                         size="sm"
-                        color={u.role === 'Admin' ? 'success' : u.role === 'Soil Expert' ? 'primary' : 'warning'}
+                        color={u.role === 'Soil Expert' && u.roleVerify === "false" ? 'dark' : u.role === 'Soil Expert' && u.roleVerify === "true" ? 'warning' : 'success' }
                       >
                         {u.role === 'Soil Expert' && u.roleVerify === "false" ? 'Not Verified' : u.role === 'Soil Expert' && u.roleVerify === "true" ? 'Soil Expert' : 'Admin' }
                       </Badge>
