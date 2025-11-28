@@ -1,30 +1,40 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link } from "react-router"; 
 import { useEffect, useState } from "react";
 import PageMeta from "../../components/common/PageMeta";
+import api from "../../utils/api"; 
 
 export default function VerifyPage() {
     const { token } = useParams();
     const [status, setStatus] = useState("loading");
 
+    // Verify account on mount
     useEffect(() => {
         const verifyAccount = async () => {
             try {
-                const response = await fetch(
-                    `https://soilsnap-production.up.railway.app/api/users/verify/${token}`
-                );
+                const response = await api.get(`/api/users/verify/${token}`);
 
-                if (response.ok) {
+                // Assuming your backend now returns { success: true } on verification
+                if (response.data?.success) {
                     setStatus("success");
                 } else {
                     setStatus("failed");
                 }
             } catch (error) {
+                console.error("Verification error:", error.response || error);
                 setStatus("failed");
             }
         };
 
         verifyAccount();
     }, [token]);
+
+    // Auto redirect to /home after 5 seconds if success
+    useEffect(() => {
+        if (status === "success") {
+            const timer = setTimeout(() => window.location.assign("/home"), 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [status]);
 
     return (
         <>
@@ -34,7 +44,7 @@ export default function VerifyPage() {
                 <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 max-w-md w-full text-center">
 
                     {status === "loading" && (
-                        <h2 className="text-gray-700 dark:text-gray-200">
+                        <h2 className="text-gray-700 dark:text-gray-200 text-lg">
                             Verifying your account...
                         </h2>
                     )}
@@ -45,11 +55,14 @@ export default function VerifyPage() {
                                 Email Verified Successfully!
                             </h1>
                             <p className="text-gray-600 dark:text-gray-300 mt-3">
-                                Your SoilSnap account is now verified.
+                                Your SOILSNAP account is now verified.
+                            </p>
+                            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
+                                Redirecting to dashboard in 5 seconds...
                             </p>
                             <Link to="/home">
                                 <button className="mt-6 w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg">
-                                    Go to Dashboard
+                                    Go to Dashboard Now
                                 </button>
                             </Link>
                         </>
