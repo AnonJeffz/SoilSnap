@@ -103,7 +103,7 @@ export default function UserTable({ searchTerm }: UserTableProps) {
                         size="sm"
                         color={u.role === 'Admin' ? 'success' : u.role === 'Soil Expert' ? 'primary' : 'warning'}
                       >
-                        {u.role === 'Soil Expert' ? (u.roleVerify === "true" ? 'Soil Expert' : 'Not Verified') : 'Admin'}
+                        {u.role === 'Soil Expert' && u.roleVerify === "false" ? 'Not Verified' : u.role === 'Soil Expert' && u.roleVerify === "true" ? 'Soil Expert' : 'Admin' }
                       </Badge>
                     </TableCell>
                     {/* Actions */}
