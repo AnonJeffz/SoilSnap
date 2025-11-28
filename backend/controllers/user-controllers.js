@@ -21,6 +21,7 @@ const Details = (user) => {
     role: user.role,
     updatedAt: user.updatedAt,
     verificationToken: user.verificationToken,
+    roleVerify: user.roleVerify,
     profile: user.profile,
   }
 }
