@@ -12,13 +12,11 @@ export const login = async (req, res) => {
             return res.status(400).json({success: false, message:'All fields are required'})
         }
         const user = await User.findOne({ email });
-
-        if(user.googleId != null){ 
-            return res.status(400).json({success: false, message:'Invalid Google login' });
-        }
-
         if(!user){
             return res.status(404).json({success: false, message:'Incorrect password or email' }) 
+        }
+        if(user.googleId != null){ 
+            return res.status(400).json({success: false, message:'Invalid Google login' });
         }
         const auth = await bcrypt.compare(password,user.password)
         if (!auth) {
