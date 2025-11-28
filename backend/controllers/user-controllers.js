@@ -125,25 +125,38 @@ export const createUser = async (req, res) => {
 
 export const verifyUser = async (req, res) => {
   const { token } = req.params;
+
   try {
+    if (!token) {
+      return res.status(400).send("Invalid verification link.");
+    }
+
     const user = await User.findOne({ verificationToken: token });
-    user.isVerify = true;
+
+    if (!user) {
+      return res.status(404).send("Verification token is invalid or expired.");
+    }
+
+    user.isVerified = true;
     user.verificationToken = undefined;
     await user.save();
-    res.status(200).send(`
+
+    return res.status(200).send(`
       <html>
         <head>
-          <meta http-equiv="refresh" content="0;url=https://soilsnap-production.up.railway.app/signin" />
+          <meta http-equiv="refresh" content="0;url=https://soilsnap-production.up.railway.app/verify?status=success" />
         </head>
         <body>
-          <p>Verification successful! Redirecting to login page...</p>
+          <p>Verification successful! Redirecting...</p>
         </body>
       </html>
     `);
+
   } catch (error) {
-    res.status(500).json({ message: "Error verifying user", error: error.message });
+    return res.status(500).send("Server error verifying user.");
   }
-}
+};
+
 
 export const deleteUser = async (req, res) => {
   const { id } = req.params;

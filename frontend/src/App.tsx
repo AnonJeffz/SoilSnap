@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
-//import NotFound from "./pages/OtherPage/NotFound";
+import NotFound from "./pages/OtherPage/NotFound";
 import UserProfiles from "./pages/UserProfiles";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
@@ -11,6 +11,7 @@ import LandingPage from "./pages/Menu/LandingPage";
 import UserAccounts from "./pages/Accounts/UserAccounts";
 import ResetAccount from "./pages/AuthPages/Reset";
 import NewPassword from "./pages/AuthPages/New";
+import VerifyPage from "./pages/AuthPages/verifypage";
 import OTPForm from "./pages/AuthPages/OTP";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -70,6 +71,11 @@ function AppContent() {
           <NewPassword />
         </PublicRoute>
       } />
+      <Route path="/verify" element={
+        <PublicRoute>
+          <VerifyPage />
+        </PublicRoute>
+      } />
 
           {/* Dashboard Layout - Protected Routes */}
           <Route element={
@@ -112,7 +118,7 @@ function AppContent() {
           </Route>
 
           {/* Fallback Route */}
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
   );
 }
