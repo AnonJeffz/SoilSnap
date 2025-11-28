@@ -164,6 +164,11 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = req.url;
 
+  // --- Bypass verification route ---
+  if (url.includes("/api/users/verify/")) {
+    return event.respondWith(fetch(req));
+  }
+
   // Ignore large models
   if (url.includes("/models/") || url.endsWith(".bin") || url.endsWith(".wasm") || url.endsWith(".map")) return;
 
