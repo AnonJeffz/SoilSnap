@@ -55,7 +55,8 @@ export const getAllUsers = async (req, res) => {
       role: user.role,
       isVerify: user.isVerify,
       createdAt: user.createdAt,
-      profile: user.profile
+      profile: user.profile,
+      roleVerify: user.roleVerify
     }));
     
     res.status(200).json({ 
