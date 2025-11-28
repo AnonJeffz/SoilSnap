@@ -3,6 +3,7 @@ import User from "../models/user-model.js";
 import path from "path";
 import fs from "fs";
 import { createLog } from './logs-controllers.js';
+import mail from "../config/mail.js";
 
 export const createRequest = async(req, res) => {
     try{
@@ -51,6 +52,20 @@ export const createRequest = async(req, res) => {
             ipAddress: req.ip,
             userAgent: req.headers["user-agent"],
         });
+        const details = {
+            from: process.env.SENDGRID_FROM,
+            to: req.user?.email,
+            subject: "Verification Submitted Successfully",
+            html: `
+                <div style="font-family: 'Arial', sans-serif; color: #333; padding: 30px; text-align: center; background-color: #f9fafb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #2b6cb0; font-size: 24px; font-weight: 600; margin-bottom: 20px;">Thank You for Your Submission!</h2>
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">We’ve received your verification request for the Soil Expert program. Our team will review your submission and notify you once it's approved.</p>
+                    <p style="font-size: 16px; line-height: 1.5; margin-bottom: 30px;">Please keep an eye on your inbox for further updates.</p>
+                </div>
+            `,
+            };
+
+        await mail.sendMail(details);
         res.status(201).json({ message: "Request created successfully", data: result });
     }
     catch(error){
@@ -171,6 +186,22 @@ export const changeRole = async(req, res) => {
                 ipAddress: req.ip,
                 userAgent: req.headers["user-agent"],
             });
+
+            const details = {
+                from: process.env.SENDGRID_FROM,
+                to: request.email,
+                subject: "Verification Approved Successfully",
+                html: `
+                    <div style="font-family: 'Arial', sans-serif; color: #333; padding: 30px; text-align: center; background-color: #f9fafb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #2b6cb0; font-size: 24px; font-weight: 600; margin-bottom: 20px;">Congratulations! Your Verification Has Been Approved!</h2>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">We're excited to inform you that your verification request for the Soil Expert program has been successfully approved. Welcome aboard!</p>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 30px;">You can now access the full features of the program. Feel free to reach out if you have any questions or need assistance.</p>
+                    </div>
+                `,
+            };
+
+            await mail.sendMail(details);
+
             res.status(200).json({ success: true, message: "User role updated to Soil Expert" });
         }
     } catch (error) {

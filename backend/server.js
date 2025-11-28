@@ -80,7 +80,7 @@ app.get("/manifest.json", (req, res) => {
 
 app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-})
+});
 
 
 app.listen(5000, () => {

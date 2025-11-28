@@ -3,7 +3,6 @@ import multer from "multer";
 import path from "path";
 import { createSoil, getSoil, editSoil, deleteSoil, viewSoil, countSoil } from "../controllers/soil-controller.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
-import { requireAdmin } from "../middleware/roleMiddleware.js";
 
 const router = express.Router();
 
