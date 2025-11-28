@@ -18,7 +18,6 @@ export default function SignInForm() {
         setLoginsUser,
         handleSignIn,
         error,
-        loginGoogle
       } = useSignIn();
 
     if (isLoading) {
@@ -52,7 +51,7 @@ export default function SignInForm() {
             </p>
           </div>
           <div>
-            <div className="w-full flex justify-center mb-5">
+            {/* <div className="w-full flex justify-center mb-5">
               <button 
                 onClick={loginGoogle}
                 type="button"
@@ -83,8 +82,8 @@ export default function SignInForm() {
                 </svg>
                 Google
               </button>
-            </div>
-            <div className="relative py-3 sm:py-5">
+            </div> */}
+            {/* <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-200 dark:border-gray-800"></div>
               </div>
@@ -93,7 +92,7 @@ export default function SignInForm() {
                   Or
                 </span>
               </div>
-            </div>
+            </div> */}
             <form>
               <div className="space-y-6">
                 <div>
