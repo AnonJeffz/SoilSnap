@@ -217,7 +217,7 @@ export const getUserCount = async ( req, res ) => {
 
 export const getSoilExpertCount = async( req, res ) => {
   try {
-    const count = await User.countDocuments({ role: 'Soil Expert' });
+    const count = await User.countDocuments({ role: 'Soil Expert', roleVerify: 'true' });
     res.status(200).json({ count });
   } catch (error) {
     res.status(500).json({ message: "Error fetching Soil Expert count", error: error.message });
