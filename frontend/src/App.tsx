@@ -35,7 +35,7 @@ import { useEffect } from "react";
 import { seedRecommendationsIfMissing } from "./lib/seed-recommendations";
 
 function AppContent() {
-  usePasswordResetCleanup();
+  usePasswordResetCleanup(); // Clean up tokens when navigating away from reset flow
 
   return (
     <Routes>
@@ -71,60 +71,56 @@ function AppContent() {
         </PublicRoute>
       } />
 
-      {/* Dashboard Layout - Protected Routes */}
-      <Route element={
-        <ProtectedRoute>
-          <AppLayout />
-        </ProtectedRoute>
-      }>
-        <Route path="/dashboard" element={<Home />} />
+          {/* Dashboard Layout - Protected Routes */}
+          <Route element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }>
+            <Route path="/dashboard" element={<Home />} />
 
-        {/* Others Page */}
-        <Route path="/user-accounts" element={
-          <RoleBasedRoute allowedRoles={['Admin']}>
-            <UserAccounts />
-          </RoleBasedRoute>
-        } />
-        <Route path="/soil-location" element={
-          <RoleBasedRoute allowedRoles={['Admin', 'Soil Expert']}>
-            <SoilLocation />
-          </RoleBasedRoute>
-        } />
-        <Route path="/request" element={
-          <RoleBasedRoute allowedRoles={['Admin']}>
-            <Request />
-          </RoleBasedRoute>
-        } />
-        <Route path="/logs" element={
-          <RoleBasedRoute allowedRoles={['Admin']}>
-            <LogsView />
-          </RoleBasedRoute>
-        } />
-        <Route path="/maps" element={<Map />} />
-        <Route path="/profile" element={<UserProfiles />} />
-        
-        {/* Forms */}
-        <Route path="/crops" element={<Crop />} />
-        <Route path="/soil" element={<Soil />} />
-        <Route path="/crops/:id" element={<CropDetailPage />} />
-        <Route path="/soil/:id" element={<SoilDetailsPage />} />
-      </Route>
+            {/* Others Page */}
+            <Route path="/user-accounts" element={
+              <RoleBasedRoute allowedRoles={['Admin']}>
+                <UserAccounts />
+              </RoleBasedRoute>
+            } />
+            <Route path="/soil-location" element={
+              <RoleBasedRoute allowedRoles={['Admin', 'Soil Expert']}>
+                <SoilLocation />
+              </RoleBasedRoute>
+            } />
+            <Route path="/request" element={
+              <RoleBasedRoute allowedRoles={['Admin']}>
+                <Request />
+              </RoleBasedRoute>
+            } />
+            <Route path="/logs" element={
+              <RoleBasedRoute allowedRoles={['Admin']}>
+                <LogsView />
+              </RoleBasedRoute>
+            } />
+            <Route path="/maps" element={<Map />} />
+            <Route path="/profile" element={<UserProfiles />} />
+            
+            {/* Forms */}
+            <Route path="/crops" element={<Crop />} />
+            <Route path="/soil" element={<Soil />} />
+            <Route path="/crops/:id" element={<CropDetailPage />} />
+            <Route path="/soil/:id" element={<SoilDetailsPage />} />
+            {/* Charts */}
+          </Route>
 
-      {/* Fallback Route - ONLY for non-API routes */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+          {/* Fallback Route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
   );
 }
 
 export default function App() {
-  useEffect(() => {
-    seedRecommendationsIfMissing();
-  }, []);
-
-  // CRITICAL: Don't render React app at all for API routes
-  if (window.location.pathname.startsWith('/api/')) {
-    return null;
-  }
+    useEffect(() => {
+      seedRecommendationsIfMissing();
+    }, []);
     
   return (
     <GoogleOAuthProvider clientId="180485865427-eccplulce91kki9p3f05i9pr63a9b8j9.apps.googleusercontent.com">
