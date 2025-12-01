@@ -18,18 +18,18 @@ interface PredictionResult {
   confidence: number;
   alternatives?: { prediction: string; confidence: number }[];
 }
-// new class
+
 const classNames = [
-  'Clay',
-  'Clay Loam',
-  'Loam',
-  'Loamy Sand',
-  'Non-Soil',
-  'Sand',
-  'Sandy Loam',
-  'Silt',
-  'Silty Clay',
-  'Silty Loam'
+  "Clay",
+  "Loam",
+  "Loamy Sand",
+  "Non-soil",
+  "Sand",
+  "Sandy Clay Loam",
+  "Sandy Loam",
+  "Silt",
+  "Silty Clay",
+  "Silty Loam",
 ];
 
 const getTopK = (probs: number[], k = 5) => {
@@ -57,12 +57,9 @@ export function useImagePredictor() {
   const { isOpen, openModal, closeModal } = useModal();
 
   const { model, loading: modelLoading } = useModel();
-  // new model
-  const MODEL_SERVER_URL = "https://web-production-8e116.up.railway.app/predict";
-  const useServerWhenOnline = process.env.REACT_APP_USE_SERVER_PREDICTION !== "false";
 
-  // old model
-  // const MODEL_SERVER_URL = "https://soilsnap-model.up.railway.app/predict";
+  const MODEL_SERVER_URL = "https://soilsnap-model.up.railway.app/predict";
+  const useServerWhenOnline = process.env.REACT_APP_USE_SERVER_PREDICTION !== "false";
 
   const fileToTensor = async (file: File) => {
     const bitmap = await createImageBitmap(file);
