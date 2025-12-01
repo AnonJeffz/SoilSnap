@@ -18,18 +18,18 @@ interface PredictionResult {
   confidence: number;
   alternatives?: { prediction: string; confidence: number }[];
 }
-
+// new class
 const classNames = [
-  "Clay",
-  "Loam",
-  "Loamy Sand",
-  "Non-soil",
-  "Sand",
-  "Sandy Clay Loam",
-  "Sandy Loam",
-  "Silt",
-  "Silty Clay",
-  "Silty Loam",
+  'Clay',
+  'Clay Loam',
+  'Loam',
+  'Loamy Sand',
+  'Non-Soil',
+  'Sand',
+  'Sandy Loam',
+  'Silt',
+  'Silty Clay',
+  'Silty Loam'
 ];
 
 const getTopK = (probs: number[], k = 5) => {
