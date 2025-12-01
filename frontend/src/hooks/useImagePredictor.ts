@@ -58,7 +58,7 @@ export function useImagePredictor() {
 
   const { model, loading: modelLoading } = useModel();
 
-  const MODEL_SERVER_URL = "web-production-8e116.up.railway.app/predict";
+  const MODEL_SERVER_URL = "https://web-production-8e116.up.railway.app/predict";
   const useServerWhenOnline = process.env.REACT_APP_USE_SERVER_PREDICTION !== "false";
 
   const fileToTensor = async (file: File) => {
