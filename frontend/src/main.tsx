@@ -23,18 +23,6 @@ createRoot(document.getElementById("root")!).render(
 
 // ✅ Register the service worker (for PWA)
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.addEventListener("message", (evt) => {
-    console.log("SW message:", evt.data);
-    // broadcast as window event so React components can listen easily
-    window.dispatchEvent(new CustomEvent("sw-status", { detail: evt.data }));
-  });
-}
-
-window.addEventListener("online", () => {
-  flushQueueNow();
-});
-
-if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js")
@@ -42,3 +30,9 @@ if ("serviceWorker" in navigator) {
       .catch((err) => console.error("SW registration failed:", err));
   });
 }
+
+window.addEventListener("online", () => {
+  flushQueueNow();
+});
+
+

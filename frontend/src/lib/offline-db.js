@@ -52,6 +52,7 @@ export async function putData(item) {
   const db = await openDB();
   return new Promise((res, rej) => {
     const tx = db.transaction(STORE_DATA, "readwrite");
+    console.log(tx);
     tx.objectStore(STORE_DATA).put(item);
     tx.oncomplete = () => res();
     tx.onerror = () => rej(tx.error);
@@ -62,6 +63,7 @@ export async function getData(id) {
   const db = await openDB();
   return new Promise((res, rej) => {
     const tx = db.transaction(STORE_DATA, "readonly");
+    console.log(tx);
     const req = tx.objectStore(STORE_DATA).get(id);
     req.onsuccess = () => res(req.result);
     req.onerror = () => rej(req.error);
