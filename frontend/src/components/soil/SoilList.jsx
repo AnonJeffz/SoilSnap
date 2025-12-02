@@ -57,7 +57,7 @@ export default function SoilList() {
                         />
                     </div>
                 </div>
-                {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true") ) && (
+                {user.role == "Admin" && (
                     <button 
                         className="px-3 sm:px-4 py-2 sm:py-3 bg-success-500 rounded-lg sm:rounded-xl text-white hover:bg-success-600 transition-colors text-sm sm:text-base font-medium whitespace-nowrap flex-shrink-0" 
                         onClick={openModal}

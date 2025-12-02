@@ -197,7 +197,7 @@ export function useImagePredictor() {
         setLoading(false);
         return;
       } catch (err: any) {
-        setError("Server prediction failed. Try again or use offline mode.");
+        setError("Server prediction failed. Try again.");
         console.warn("Server prediction error:", err);
         setLoading(false);
         return;
@@ -206,7 +206,7 @@ export function useImagePredictor() {
 
     // Else: offline or server usage disabled -> only TFJS path
     if (!model) {
-      setError(modelLoading ? "Model is still loading. Try again shortly." : "Model not available offline.");
+      setError(modelLoading ? "Model is still loading. Load it again." : "The model isn’t available offline. You need to connect to Wi-Fi to load it. Just keep the app open for about 6–7 minutes and it will load automatically.");
       return;
     }
 
