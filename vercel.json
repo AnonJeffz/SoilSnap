@@ -1,14 +1,6 @@
 {
-  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://api.soilsnap.site/api/$1"
-    },
-    {
-      "source": "/((?!_next/static|_next/image|favicon.ico).*)",
-      "destination": "/index.html"
-    }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
 
