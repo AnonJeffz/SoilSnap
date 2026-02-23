@@ -29,6 +29,7 @@ app.use(cors({
     "https://soilsnap-production.up.railway.app",
     "https://api.soilsnap.site",
     "https://soilsnap.site",
+    "https://www.soilsnap.site",
   ],
   credentials: true, // Enable cookies/credentials
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
