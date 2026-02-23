@@ -91,7 +91,7 @@ export const createUser = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString("hex");
     newUser.verificationToken = verificationToken;
 
-    const verifyUrl = `https://api.soilsnap.site/verify/${verificationToken}`;
+    const verifyUrl = `https://api.soilsnap.site/api/users/verify/${verificationToken}`;
 
     const details = {
       from: process.env.SENDGRID_FROM,
