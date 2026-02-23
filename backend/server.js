@@ -1,5 +1,7 @@
-import express from "express";
 import dotenv from "dotenv";
+dotenv.config(); // Load environment variables FIRST
+
+import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/connection.js";
@@ -14,10 +16,8 @@ import { generalLimiter } from "./middleware/rateLimiter.js";
 import passport from "passport";
 import "./services/passport.js"; // Import the passport configuration
 import session from "express-session";
-import transporter from "./config/mail.js";
+import transporter from "./config/mail.js"; // Now env vars are loaded
 import path from "path";
-
-dotenv.config();
 
 const app = express();
 app.set('trust proxy', 1);
@@ -27,6 +27,8 @@ app.use(cors({
   origin: [
     "http://localhost:5173",
     "https://soilsnap-production.up.railway.app",
+    "https://api.soilsnap.site",
+    "https://soilsnap.site",
   ],
   credentials: true, // Enable cookies/credentials
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
