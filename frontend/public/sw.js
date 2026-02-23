@@ -1,5 +1,5 @@
-const CACHE_NAME_STATIC = "soil-snap-static-v3";
-const CACHE_NAME_RUNTIME = "soil-snap-runtime-v3";
+const CACHE_NAME_STATIC = "soil-snap-static-v4";
+const CACHE_NAME_RUNTIME = "soil-snap-runtime-v4";
 const OFFLINE_PAGE = "/offline.html";
 const APP_SHELL = [
   "/",
@@ -110,7 +110,7 @@ self.addEventListener("install", (event) => {
         const db = await idbOpen();
         for (const soil of soils) {
           try {
-            const url = "https://soilsnap.up.railway.app/api/crop/recommendation"; // absolute URL
+            const url = "https://api.soilsnap.site/api/crop/recommendation"; // absolute URL
             console.log("SW: fetching recommendation for", soil);
             const res = await fetch(url, {
               method: "POST",
