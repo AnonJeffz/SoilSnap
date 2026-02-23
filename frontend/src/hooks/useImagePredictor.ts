@@ -59,7 +59,8 @@ export function useImagePredictor() {
   const { model, loading: modelLoading } = useModel();
 
   const MODEL_SERVER_URL = "https://soilsnap-model.up.railway.app/predict";
-  const useServerWhenOnline = process.env.REACT_APP_USE_SERVER_PREDICTION !== "false";
+  const useServerWhenOnline = process.env.REACT_APP_USE_SERVER_PREDICTION === "true";
+  console.log("Prediction mode:", useServerWhenOnline ? "Server (Flask API)" : "Client-side (TensorFlow.js)");
 
   const fileToTensor = async (file: File) => {
     const bitmap = await createImageBitmap(file);
