@@ -17,7 +17,7 @@ const ModelContext = createContext<ModelContextType>({
 
 export const ModelProvider: React.FC<{ children: React.ReactNode; modelUrl?: string }> = ({
   children,
-  modelUrl = "https://soilsnap-production.up.railway.app/models/model.json", // ✅ your hosted model
+  modelUrl = "https://api.soilsnap.site/models/model.json", // ✅ EC2 backend
 }) => {
   const [model, setModel] = useState<tf.GraphModel | null>(null);
   const [loading, setLoading] = useState(false);

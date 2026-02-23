@@ -68,7 +68,7 @@ app.use("/uploads/crops", express.static("backend/uploads/crops"));
 app.use("/uploads/request", express.static("backend/uploads/request"));
 app.use("/uploads/profile", express.static("backend/uploads/profile"));
 app.use("/uploads/location", express.static("backend/uploads/location"));
-
+app.use("/models", express.static("backend/models"));
 
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
