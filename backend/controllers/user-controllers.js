@@ -75,6 +75,7 @@ export const getAllUsers = async (req, res) => {
 
 export const createUser = async (req, res) => {
   const user = req.body;
+  console.log("Creating user with data:", JSON.stringify(user, null, 2));
 
   const newUser = new User(user);
   const existingUser = await User.findOne({ email: newUser.email });
@@ -155,6 +156,7 @@ export const createUser = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error("Error creating user:", error.message, error.stack);
     res.status(400).json({ 
       success: false, 
       message: "Error creating user", 
