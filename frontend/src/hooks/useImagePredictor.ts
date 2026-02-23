@@ -60,6 +60,7 @@ export function useImagePredictor() {
 
   // Server predictions disabled - Railway server no longer exists
   // Using client-side TensorFlow.js model only
+  const MODEL_SERVER_URL = "https://soilsnap-model.up.railway.app/predict"; // kept for code compatibility
   const useServerWhenOnline = false;
 
   const fileToTensor = async (file: File) => {
