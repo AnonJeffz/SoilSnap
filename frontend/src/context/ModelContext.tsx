@@ -24,7 +24,7 @@ export const ModelProvider: React.FC<{ children: React.ReactNode; modelUrl?: str
   const [error, setError] = useState<string | null>(null);
   const loadedRef = useRef(false);
 
-  const MODEL_KEY = "soil-model-v1"; // ✅ version your model cache (bump when updated)
+  const MODEL_KEY = "soil-model-v2"; // ✅ bumped version to bust old cache
 
   const loadModel = async (url = modelUrl) => {
     if (loadedRef.current && model) return model;

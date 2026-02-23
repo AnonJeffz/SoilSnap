@@ -1,0 +1,13 @@
+{
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "frontend/dist",
+  "env": {
+    "REACT_APP_USE_SERVER_PREDICTION": "false"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
