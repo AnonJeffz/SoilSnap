@@ -8,6 +8,19 @@ import Button from "../ui/button/Button";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import { MoreDotIcon } from "../../icons";
+import { API_BASE_URL } from "../../utils/api";
+
+const getDocumentUrl = (docPath) => {
+    if (!docPath) return "";
+    if (docPath.startsWith("http")) return docPath;
+    return `${API_BASE_URL}${docPath}`;
+};
+
+const getFileExtension = (filename) => {
+    if (!filename) return "";
+    const parts = filename.split('.');
+    return parts.length > 1 ? parts[parts.length - 1].toLowerCase() : "";
+};
 
 export default function UserRequest() {
     const { 
@@ -188,8 +201,36 @@ export default function UserRequest() {
                                 <div>
                                     <span className="dark:text-gray-300">Document: <span className="dark:text-white">{selectedRequest.type}</span></span>
                                 </div>
-                                <div>
-                                    <img src={selectedRequest.image} alt="Document" className="object-cover w-full h-full rounded-lg border border-gray-200 dark:border-gray-700" />
+                                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+                                    {(() => {
+                                        const ext = getFileExtension(selectedRequest.originalFilename || selectedRequest.image);
+                                        const docUrl = getDocumentUrl(selectedRequest.image);
+                                        
+                                        if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                                            return <img src={docUrl} alt="Document" className="object-cover w-full h-full rounded-lg" />;
+                                        } else if (ext === 'pdf') {
+                                            return (
+                                                <div className="flex flex-col items-center justify-center p-8 space-y-3">
+                                                    <svg className="w-16 h-16 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+                                                        <text x="6" y="14" fontSize="6" fill="white" fontWeight="bold">PDF</text>
+                                                    </svg>
+                                                    <p className="text-gray-600 dark:text-gray-400">{selectedRequest.originalFilename || 'Document.pdf'}</p>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-500">Click download button below to view</p>
+                                                </div>
+                                            );
+                                        } else {
+                                            return (
+                                                <div className="flex flex-col items-center justify-center p-8 space-y-3">
+                                                    <svg className="w-16 h-16 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path d="M4 18h12V6h-4V2H4v16zm-2 1V0h12l4 4v16H2v-1z"/>
+                                                    </svg>
+                                                    <p className="text-gray-600 dark:text-gray-400">{selectedRequest.originalFilename || 'Document'}</p>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-500">Click download button below to view</p>
+                                                </div>
+                                            );
+                                        }
+                                    })()}
                                 </div>
                                 <div>
                                     <button
@@ -197,8 +238,8 @@ export default function UserRequest() {
                                         size="sm"
                                         variant="outline"
                                         onClick={() => handleDownload(
-                                            selectedRequest.image, 
-                                            `${selectedRequest.firstname}_${selectedRequest.lastname}_document.jpg`
+                                            selectedRequest.image,
+                                            selectedRequest.originalFilename || `${selectedRequest.firstname}_${selectedRequest.lastname}_document`
                                         )}
                                         className="w-full sm:w-auto border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
                                     >

@@ -23,6 +23,10 @@ const requestSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    originalFilename: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: true

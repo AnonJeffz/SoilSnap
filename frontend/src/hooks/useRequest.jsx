@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useEffect } from "react";
-import api from "../utils/api";
+import api, { API_BASE_URL } from "../utils/api";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -17,21 +17,26 @@ export default function useRequest() {
     const { closeModal, isOpen, openModal } = useModal();
     const [selectedRequest, setSelectedRequest] = useState({});
 
-    const handleDownload = async (imageUrl, filename) => {
+    const handleDownload = async (documentPath, filename) => {
         try {
-            const response = await fetch(imageUrl);
+            // Construct full URL if not already a full URL
+            const fullUrl = documentPath.startsWith('http') 
+                ? documentPath 
+                : `${API_BASE_URL}${documentPath}`;
+            
+            const response = await fetch(fullUrl);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = filename || `document_${selectedRequest._id}.jpg`;
+            link.download = filename || 'document';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Download failed:', error);
-            // You can add a toast notification here if you have one
+            toast.error('Failed to download document');
         }
     };
 

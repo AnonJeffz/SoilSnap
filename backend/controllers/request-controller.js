@@ -9,6 +9,7 @@ export const createRequest = async(req, res) => {
     try{
         const { firstname, middlename, lastname, email, description, type } = req.body;
         const image = req.file ? req.file.filename : null;
+        const originalFilename = req.file ? req.file.originalname : null;
 
         const existingRequest = await Request.findOne({ 
             email: email,
@@ -38,6 +39,7 @@ export const createRequest = async(req, res) => {
             lastname,
             email,
             image: `/uploads/request/${image}`,
+            originalFilename,
             description,
             type,
             status: "Request",
