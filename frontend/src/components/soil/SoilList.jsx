@@ -9,6 +9,13 @@ import { MoreDotIcon } from "../../icons";
 import LoadingSpinner  from "../ui/spinner/LoadingSpinner";
 import { Link } from "react-router";
 import TextArea from "../form/input/TextArea";
+import { API_BASE_URL } from "../../utils/api";
+
+const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    if (imagePath.startsWith("http")) return imagePath;
+    return `${API_BASE_URL}${imagePath}`;
+};
 
 export default function SoilList() {
     const {
@@ -73,7 +80,7 @@ export default function SoilList() {
                         <div className="max-w-lg rounded overflow-hidden shadow-lg">
                             <div className="relative">
                                 <Link to={`/soil/${soil._id}`}>
-                                    <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={soil.image} alt={soil.name} />
+                                    <img className="w-full h-80 cursor-pointer hover:opacity-90 transition-opacity" src={getImageUrl(soil.image)} alt={soil.name} />
                                 </Link>
                                 {(user.role == "Admin" || (user.role == "Soil Expert" && user.roleVerify == "true")) && (
                                     <div className="absolute top-2 right-2 z-20">

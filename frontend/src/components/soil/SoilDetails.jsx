@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
+import { API_BASE_URL } from "../../utils/api";
+
+const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    if (imagePath.startsWith("http")) return imagePath;
+    return `${API_BASE_URL}${imagePath}`;
+};
 
 export default function SoilDetails() {
   const { id } = useParams();
@@ -25,7 +32,7 @@ export default function SoilDetails() {
   return (
     <section className="w-full">
         <div className="max-w-2xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow">
-                <img src={soilData.image} alt={soilData.name} className="w-full h-80 object-cover rounded mb-4" />
+                <img src={getImageUrl(soilData.image)} alt={soilData.name} className="w-full h-80 object-cover rounded mb-4" />
         </div>
         <h2 className="text-2xl font-bold mb-4 dark:text-white">{soilData.name}</h2>
         <p className="mb-4 text-gray-700 dark:text-gray-200">{soilData.description}</p>
