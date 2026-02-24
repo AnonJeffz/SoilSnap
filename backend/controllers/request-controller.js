@@ -159,8 +159,38 @@ export const editRequest = async(req, res) => {
         }
 
         request.status = status;
-        // add a message in gmail that decline and also in account notification
         const result = await request.save();
+
+        // Send email notification when request is declined
+        if (status === "Declined") {
+            const details = {
+                from: process.env.SENDGRID_FROM,
+                to: request.email,
+                subject: "Update on Your Verification Request",
+                html: `
+                    <div style="font-family: 'Arial', sans-serif; color: #333; padding: 30px; text-align: center; background-color: #f9fafb; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #dc2626; font-size: 24px; font-weight: 600; margin-bottom: 20px;">Verification Request Update</h2>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">Thank you for your interest in becoming a Soil Expert with SOILSNAP.</p>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">After careful review, we regret to inform you that your verification request has not been approved at this time.</p>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">This decision may be due to incomplete documentation or other requirements not being met. You are welcome to resubmit your application with updated information.</p>
+                        <p style="font-size: 16px; line-height: 1.5; margin-bottom: 30px;">If you have any questions or need clarification, please don't hesitate to contact our support team.</p>
+                        <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">Best regards,<br/>The SOILSNAP Team</p>
+                    </div>
+                `,
+            };
+
+            await mail.sendMail(details);
+            await createLog({
+                user_id: req.user?._id,
+                action: "UPDATE",
+                table: "Request",
+                description: `Admin ${req.user?.email || "Admin"} declined verification request for ${request.email}.`,
+                status: "success",
+                ipAddress: req.ip,
+                userAgent: req.headers["user-agent"],
+            });
+        }
+
         res.status(200).json({ success: true, data: result });
     }
     catch(error) {
