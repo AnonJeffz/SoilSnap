@@ -112,7 +112,7 @@ function AppContent() {
             <Route path="/soil/:id" element={<SoilDetailsPage />} />
             {/* Charts */}
           </Route>
-            <Route path="/verify/:token" element={
+            <Route path="/verification" element={
               <PublicRoute>
                 <VerifyPage />
               </PublicRoute>

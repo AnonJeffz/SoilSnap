@@ -170,23 +170,23 @@ export const verifyUser = async (req, res) => {
 
     try {
         if (!token) {
-            return res.status(400).json({ success: false, message: "Invalid verification link" });
+            return res.redirect(`${process.env.CLIENT_URL}/verification?status=error&message=Invalid verification link`);
         }
 
         const user = await User.findOne({ verificationToken: token });
 
         if (!user) {
-            return res.status(404).json({ success: false, message: "Token invalid or expired" });
+            return res.redirect(`${process.env.CLIENT_URL}/verification?status=error&message=Token invalid or expired`);
         }
 
         user.isVerify = true;
         user.verificationToken = undefined;
         await user.save();
 
-        return res.status(200).json({ success: true, message: "Account verified" });
+        return res.redirect(`${process.env.CLIENT_URL}/verification?status=success`);
 
     } catch (error) {
-        return res.status(500).json({ success: false, message: "Server error" });
+        return res.redirect(`${process.env.CLIENT_URL}/verification?status=error&message=Server error`);
     }
 };
 

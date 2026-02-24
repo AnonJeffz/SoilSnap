@@ -1,32 +1,26 @@
-import { useParams, Link } from "react-router"; 
+import { useSearchParams, Link } from "react-router"; 
 import { useEffect, useState } from "react";
 import PageMeta from "../../components/common/PageMeta";
-import api from "../../utils/api"; 
 
 export default function VerifyPage() {
-    const { token } = useParams();
+    const [searchParams] = useSearchParams();
+    const statusParam = searchParams.get("status");
+    const messageParam = searchParams.get("message");
     const [status, setStatus] = useState("loading");
+    const [errorMessage, setErrorMessage] = useState("");
 
-    // Verify account on mount
+    // Check status from URL parameters
     useEffect(() => {
-        const verifyAccount = async () => {
-            try {
-                const response = await api.get(`/api/users/verify/${token}`);
-
-                // Assuming your backend now returns { success: true } on verification
-                if (response.data?.success) {
-                    setStatus("success");
-                } else {
-                    setStatus("failed");
-                }
-            } catch (error) {
-                console.error("Verification error:", error.response || error);
-                setStatus("failed");
-            }
-        };
-
-        verifyAccount();
-    }, [token]);
+        if (statusParam === "success") {
+            setStatus("success");
+        } else if (statusParam === "error") {
+            setStatus("failed");
+            setErrorMessage(messageParam || "Verification failed");
+        } else {
+            setStatus("failed");
+            setErrorMessage("Invalid verification link");
+        }
+    }, [statusParam, messageParam]);
 
     return (
         <>
@@ -35,23 +29,22 @@ export default function VerifyPage() {
             <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 px-4">
                 <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 max-w-md w-full text-center">
 
-                    {status === "loading" && (
-                        <h2 className="text-gray-700 dark:text-gray-200 text-lg">
-                            Verifying your account...
-                        </h2>
-                    )}
-
                     {status === "success" && (
                         <>
+                            <div className="mb-4">
+                                <svg className="mx-auto h-16 w-16 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
                             <h1 className="text-2xl font-bold text-green-600 dark:text-green-400">
                                 Email Verified Successfully!
                             </h1>
                             <p className="text-gray-600 dark:text-gray-300 mt-3">
-                                Your SOILSNAP account is now verified.
+                                Your SOILSNAP account is now verified. You can now sign in to access your account.
                             </p>
-                            <Link to="/home">
-                                <button className="mt-6 w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg">
-                                    Go to Dashboard Now
+                            <Link to="/signin">
+                                <button className="mt-6 w-full py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                                    Sign In Now
                                 </button>
                             </Link>
                         </>
@@ -59,14 +52,19 @@ export default function VerifyPage() {
 
                     {status === "failed" && (
                         <>
+                            <div className="mb-4">
+                                <svg className="mx-auto h-16 w-16 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
                             <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">
                                 Verification Failed
                             </h1>
                             <p className="text-gray-600 dark:text-gray-300 mt-3">
-                                The verification link is invalid or expired.
+                                {errorMessage || "The verification link is invalid or expired."}
                             </p>
                             <Link to="/signin">
-                                <button className="mt-6 w-full py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg">
+                                <button className="mt-6 w-full py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">
                                     Go to Sign In
                                 </button>
                             </Link>
