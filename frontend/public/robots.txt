@@ -1,0 +1,17 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow access to administrative/private pages
+Disallow: /user-accounts
+Disallow: /request
+Disallow: /logs
+Disallow: /soil-location
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /new-password
+Disallow: /otp
+Disallow: /verification
+
+# Sitemap location
+Sitemap: https://soilsnap.site/sitemap.xml
